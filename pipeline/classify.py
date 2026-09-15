@@ -125,11 +125,13 @@ def run_sync(client, conn, rows, model: str) -> None:
     conn.commit()
 
 
-def run_batch(client, conn, rows, model: str, poll: int) -> None:
+def run_batch(client, conn, rows, model: str, poll: int, max_wait: int = 0) -> None:
     batch = client.messages.batches.create(
         requests=[{"custom_id": r["id"], "params": request_params(model, r)} for r in rows]
     )
-    print(f"  배치 생성: {batch.id} ({len(rows)}건). 폴링 간격 {poll}초")
+    print(f"  배치 생성: {batch.id} ({len(rows)}건). 폴링 간격 {poll}초"
+          + (f", 최대 대기 {max_wait}초" if max_wait else ""))
+    started = time.monotonic()
     while True:
         batch = client.messages.batches.retrieve(batch.id)
         counts = batch.request_counts
@@ -138,6 +140,13 @@ def run_batch(client, conn, rows, model: str, poll: int) -> None:
               f"만료={counts.expired}", flush=True)
         if batch.processing_status == "ended":
             break
+        if max_wait and time.monotonic() - started > max_wait:
+            # 배치는 서버에 그대로 남아 있습니다. 결과를 못 받았을 뿐이라
+            # 같은 날짜로 다시 돌리면 미분류 기사만 다시 제출됩니다.
+            raise TimeoutError(
+                f"배치 {batch.id} 가 {max_wait}초 안에 끝나지 않았습니다. "
+                f"같은 날짜로 재실행하세요 (이미 분류된 기사는 건너뜁니다)."
+            )
         time.sleep(poll)
 
     ok = failed = 0
@@ -164,6 +173,8 @@ def main() -> int:
     ap.add_argument("--sync", action="store_true", help="배치 대신 동기 호출 (소량 테스트용)")
     ap.add_argument("--recheck", action="store_true", help="이미 분류된 기사도 다시 분류")
     ap.add_argument("--poll", type=int, default=30, help="배치 상태 폴링 간격(초)")
+    ap.add_argument("--max-wait", type=int, default=0,
+                    help="배치 최대 대기 시간(초). 0=무제한. CI 에서는 반드시 지정하세요.")
     args = ap.parse_args()
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
@@ -185,7 +196,12 @@ def main() -> int:
     if args.sync:
         run_sync(client, conn, rows, model)
     else:
-        run_batch(client, conn, rows, model, args.poll)
+        try:
+            run_batch(client, conn, rows, model, args.poll, args.max_wait)
+        except TimeoutError as e:
+            print(f"분류 미완료: {e}", file=sys.stderr)
+            conn.close()
+            return 3
 
     for r in conn.execute(
         """SELECT c.category, COUNT(*) n FROM classifications c

@@ -1,11 +1,14 @@
-"""네이버 뉴스 검색 API 수집기.
+"""뉴스 검색 수집기 (NAVER API HUB).
 
 API 제약 (설계에 직접 영향을 주는 것들):
   * 기간 필터 파라미터가 없습니다. sort=date 로 최신순 페이징하며 대상 날짜를 지나면 끊습니다.
-  * start 는 최대 1000, display 는 최대 100 → 쿼리 1건당 최대 1,000건까지만 접근 가능합니다.
-    따라서 커버리지는 config/event.yaml 의 queries 를 여러 개로 쪼개서 확보합니다.
+  * 페이징에 상한이 있어 쿼리 1건으로 닿을 수 있는 기사 수가 제한됩니다.
+    커버리지는 config/event.yaml 의 queries 를 여러 개로 쪼개서 확보합니다.
   * 언론사 필드가 없습니다 → originallink 도메인에서 역산합니다 (sources/outlets.py).
   * 본문이 없습니다 (title/description 만) → extract_body.py 에서 원문을 따로 가져옵니다.
+
+엔드포인트·인증·페이징은 naver_api.py 가 담당합니다. 2026년 개발자센터 → API HUB
+이관으로 도메인·경로·헤더가 모두 바뀌었으므로 그 변경은 한곳에 모아 두었습니다.
 """
 from __future__ import annotations
 
@@ -20,19 +23,16 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-import requests
 import yaml
 from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect  # noqa: E402
+from naver_api import NaverApiError, NaverAuthError, NaverSearchClient  # noqa: E402
 from nlp import clean_text  # noqa: E402
 from sources.outlets import resolve as resolve_outlet  # noqa: E402
 
-API_URL = "https://openapi.naver.com/v1/search/news.json"
 KST = timezone(timedelta(hours=9), "KST")
-MAX_START = 1000
-DISPLAY = 100
 
 # 본문 식별에 무관한 추적 파라미터만 제거합니다.
 # (한국 언론사 URL 은 ?idxno=123 처럼 쿼리에 기사 ID 가 들어있는 경우가 많아 전부 지우면 안 됩니다.)
@@ -68,31 +68,16 @@ def yesterday_kst() -> str:
     return (datetime.now(KST) - timedelta(days=1)).strftime("%Y-%m-%d")
 
 
-def search(session: requests.Session, query: str, start: int) -> dict:
-    resp = session.get(
-        API_URL,
-        params={"query": query, "display": DISPLAY, "start": start, "sort": "date"},
-        timeout=15,
-    )
-    if resp.status_code == 429:
-        raise RuntimeError("네이버 API 호출 한도 초과 (검색 API 일 25,000건)")
-    resp.raise_for_status()
-    return resp.json()
+def collect_query(client: NaverSearchClient, query: str, target_date: str) -> list[dict]:
+    """대상 날짜(KST) 하루치 기사만 뽑아냅니다.
 
-
-def collect_query(session: requests.Session, query: str, target_date: str) -> list[dict]:
-    """대상 날짜(KST) 하루치 기사만 뽑아냅니다."""
+    최신순이므로 대상 날짜보다 과거로 넘어가는 순간 더 볼 필요가 없습니다.
+    """
     day_start = datetime.strptime(target_date, "%Y-%m-%d").replace(tzinfo=KST)
     day_end = day_start + timedelta(days=1)
 
     found: list[dict] = []
-    start = 1
-    while start <= MAX_START:
-        data = search(session, query, start)
-        items = data.get("items", [])
-        if not items:
-            break
-
+    for items in client.paginate_news(query):
         passed_window = False
         for item in items:
             raw = item.get("originallink") or item.get("link") or ""
@@ -106,7 +91,7 @@ def collect_query(session: requests.Session, query: str, target_date: str) -> li
             if published >= day_end:
                 continue                      # 아직 대상 날짜보다 미래 (최신순이라 앞부분)
             if published < day_start:
-                passed_window = True          # 대상 날짜를 지나 과거로 넘어감 → 중단
+                passed_window = True          # 대상 날짜를 지나 과거로 넘어감
                 break
 
             outlet, domain, resolved = resolve_outlet(raw)
@@ -124,10 +109,8 @@ def collect_query(session: requests.Session, query: str, target_date: str) -> li
                 "query": query,
             })
 
-        if passed_window or len(items) < DISPLAY:
+        if passed_window:
             break
-        start += DISPLAY
-        time.sleep(0.1)                       # 예의상 간격
     return found
 
 
@@ -163,31 +146,29 @@ def upsert(conn, rows: list[dict]) -> tuple[int, int]:
 
 def main() -> int:
     load_dotenv()
-    ap = argparse.ArgumentParser(description="네이버 뉴스 검색 API로 하루치 기사 수집")
+    ap = argparse.ArgumentParser(description="NAVER API HUB 로 하루치 기사 수집")
     ap.add_argument("--date", default=None, help="대상 날짜 YYYY-MM-DD (기본: 어제, KST)")
     ap.add_argument("--config", default="config/event.yaml")
     args = ap.parse_args()
 
-    client_id = os.environ.get("NAVER_CLIENT_ID")
-    client_secret = os.environ.get("NAVER_CLIENT_SECRET")
-    if not client_id or not client_secret:
-        print("NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 가 없습니다. .env 를 확인하세요.",
-              file=sys.stderr)
-        return 2
-
     cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
     target_date = args.date or yesterday_kst()
 
-    session = requests.Session()
-    session.headers.update({
-        "X-Naver-Client-Id": client_id,
-        "X-Naver-Client-Secret": client_secret,
-    })
+    try:
+        client = NaverSearchClient(cfg.get("api"))
+        client.verify()
+    except (NaverAuthError, NaverApiError) as e:
+        print(f"검색 API 를 사용할 수 없습니다.\n{e}", file=sys.stderr)
+        return 2
 
     conn = connect()
     total_new = total_merged = 0
     for query in cfg["queries"]:
-        rows = collect_query(session, query, target_date)
+        try:
+            rows = collect_query(client, query, target_date)
+        except (NaverAuthError, NaverApiError) as e:
+            print(f"  [{query}] 수집 실패: {e}", file=sys.stderr)
+            continue
         new, merged = upsert(conn, rows)
         total_new += new
         total_merged += merged

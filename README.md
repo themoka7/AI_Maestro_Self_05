@@ -40,8 +40,18 @@ cp .env.example .env    # 키 채워넣기
 
 | 변수 | 발급처 | 비고 |
 |---|---|---|
-| `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | [네이버 개발자센터](https://developers.naver.com/apps/#/register) | 검색 API, 일 25,000건 |
+| `NCP_API_KEY_ID` / `NCP_API_KEY` | [NCP 콘솔](https://console.ncloud.com) → NAVER API HUB | 검색 API. 종량 과금 |
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/settings/keys) | 분류용. Batch API 사용 |
+
+> **검색 API 는 개발자센터에서 NAVER API HUB 로 이관되었습니다.**
+> 도메인 `openapi.naver.com` → `naverapihub.apigw.ntruss.com`,
+> 경로 `/v1/search/news.json` → `/search/v1/news`,
+> 헤더 `X-Naver-Client-Id` → `X-NCP-APIGW-API-KEY-ID` 로 전부 바뀌었고,
+> 이관 과정에서 쇼핑·책·전문자료 검색은 종료됐습니다(뉴스는 유지).
+> 무료 일 25,000건이 아니라 **NCP 종량 과금**이므로 `config/event.yaml` 의 쿼리 수와
+> 실행 주기가 그대로 비용입니다.
+>
+> 엔드포인트가 또 바뀌면 코드가 아니라 `config/event.yaml` 의 `api:` 섹션을 고치세요.
 
 ---
 
@@ -54,6 +64,9 @@ cp .env.example .env    # 키 채워넣기
 # 특정 날짜
 .venv/bin/python pipeline/run.py --date 2026-09-14
 
+# 날짜를 가로지르는 언론사별 누적 판단
+.venv/bin/python pipeline/aggregate.py
+
 # 대시보드
 cd web && npm run dev      # http://localhost:3000
 ```
@@ -61,10 +74,16 @@ cd web && npm run dev      # http://localhost:3000
 ### 키 없이 화면부터 보고 싶다면
 
 ```bash
-.venv/bin/python pipeline/seed_demo.py --date 2026-09-14 --reset --with-mock-classification
-.venv/bin/python pipeline/run.py --date 2026-09-14 --only dedup match export
+for d in 2026-09-12 2026-09-13 2026-09-14; do
+  .venv/bin/python pipeline/seed_demo.py --date $d --with-mock-classification
+  .venv/bin/python pipeline/run.py --date $d --only dedup match export
+done
+.venv/bin/python pipeline/aggregate.py
 cd web && npm run dev
 ```
+
+하루치로는 표본이 모자라 대부분의 매체가 "표본 부족"으로 빠집니다.
+며칠 누적해야 언론사별 판단이 의미를 갖습니다.
 
 > 시드 데이터는 **전부 합성**입니다. 실제 보도가 아니며, 등장하는 언론사명은 도메인 매핑
 > 동작 확인용일 뿐 어떤 매체의 실제 보도 행태도 나타내지 않습니다.
@@ -82,17 +101,71 @@ cd web && npm run dev
 | 5 | `match.py` | 기사↔보도자료 매칭, 문서·문장 단위 복제 지표 |
 | 6 | `classify.py` | Claude Batch API 로 프레이밍 분류 |
 | 7 | `export.py` | 대시보드용 JSON 산출 |
+| 8 | `aggregate.py` | 날짜를 가로지르는 언론사별 누적 집계 |
+| — | `history.py` | JSON ↔ SQLite 복원/스냅샷, 오래된 데이터 정리 |
 | — | `evaluate.py` | 검증 셋 라벨링·정확도 리포트 (공개 전 필수) |
 
 각 단계는 **멱등**합니다. 같은 날 여러 번 돌려도 기사가 중복으로 쌓이지 않고,
 이미 본문을 받아온 기사는 다시 받지 않으며, 이미 분류된 기사는 다시 분류하지 않습니다.
 
-### 매일 자동 실행
+---
 
-```cron
-# 매일 오전 6시 (KST) — 전날치 분석
-0 6 * * * cd /path/to/repo && .venv/bin/python pipeline/run.py >> logs/run.log 2>&1
+## 자동 실행 (GitHub Actions)
+
+`.github/workflows/daily-analysis.yml` 이 **매일 KST 06:00** 에 전날치를 분석하고
+결과를 리포지토리에 커밋합니다. `.github/workflows/pages.yml` 이 그 커밋을 받아
+대시보드를 GitHub Pages 로 배포합니다.
+
+### 설정
+
+**Settings → Secrets and variables → Actions → Secrets**
+
+| 이름 | 값 |
+|---|---|
+| `NCP_API_KEY_ID` | NAVER API HUB 인증키 ID |
+| `NCP_API_KEY` | NAVER API HUB 인증키 |
+| `ANTHROPIC_API_KEY` | Anthropic API 키 |
+
+**Settings → Pages → Source: `GitHub Actions`** 로 지정하세요.
+
+수동 실행은 Actions 탭 → "일일 보도 분석" → Run workflow (날짜 지정 가능).
+
+### 왜 결과를 리포지토리에 커밋하나
+
+Actions 러너는 실행마다 초기화됩니다. SQLite 를 커밋하면 바이너리 충돌이 나므로
+**JSON 을 단일 저장소로 두고 DB 는 매번 재구성**합니다.
+
 ```
+data/history/
+  press_releases.jsonl       보도자료 누적 (매칭에 7일 소급이 필요)
+  daily/<date>.json          그날의 분석 결과
+  details/<date>/<id>.json   문장 대조 (최근 30일만 보관)
+  index.json                 보유 날짜 목록
+  outlets.json               날짜를 가로지르는 언론사별 집계
+```
+
+기사 본문은 저장하지 않습니다. 분석에만 필요하고, 저작권상 리포지토리에 쌓을 것이
+아니며, 용량도 빠르게 불어납니다.
+
+### 용량 — 지켜봐야 할 지점
+
+문장 대조 파일은 기사 1건당 2KB 안팎입니다. 작업 트리는 `prune --keep-days 30` 으로
+묶이지만 **git 히스토리는 커밋마다 쌓여 줄지 않습니다.**
+
+| 기사/일 | 1년 누적 git 용량 |
+|---|---|
+| 100건 | 약 60MB |
+| 300건 | 약 200MB |
+
+실제 기사는 데모보다 문장이 3~4배 많으므로 이보다 커집니다. GitHub 권장 상한이
+1GB 이므로 1~2년은 버티지만, 그 전에 조절할 레버는 이렇습니다.
+
+- `history.py prune --keep-days` 를 줄인다 (워크플로에서 지정)
+- `export.py` 의 `DETAIL_MIN_SIMILARITY` 를 올려 대조 파일 생성 대상을 좁힌다
+- 대조 데이터만 별도 orphan 브랜치로 분리해 주기적으로 히스토리를 눌러쓴다
+
+일별 집계(`daily/*.json`)와 누적 집계(`outlets.json`)는 기사 수와 무관하게 작으므로
+영구 보관해도 문제없습니다. 용량 문제는 전부 대조 데이터 쪽입니다.
 
 ---
 
@@ -127,6 +200,18 @@ raw   = 0.6 × 감시비율 + 0.4 × 중립비율 − 0.5 × 복제비율      �
 - **베이지안 shrinkage** — 각 비율을 전체 평균 쪽으로 당깁니다(사전 표본 10).
   이게 없으면 기사 2건 중 1건이 감시 보도인 매체가 비율 50%로 전국지를 앞지릅니다.
 - **최소 표본** — 기사 5건 미만은 순위에서 제외하고 별도 표기합니다.
+
+### 누적 집계
+
+하루치만으로는 언론사를 판단할 수 없습니다. 기사 2~3건으로는 표본이 너무 작고,
+그날 어떤 보도자료가 나왔느냐에 따라 비율이 크게 흔들립니다.
+
+집계할 때 **일별 비율을 평균내지 않습니다.** 기사 40건인 날의 복제율 50%와
+기사 2건인 날의 100%를 단순 평균하면 75%가 나오지만 실제는 (20+2)/42 = 52.4% 입니다.
+원시 건수를 합산한 뒤 비율을 계산합니다.
+
+추세는 최근 7일 평균 자율성 점수에서 그 이전 평균을 뺀 값이며, 8일치 이상 쌓여야
+표시됩니다.
 
 ### 집계 기준
 
@@ -187,7 +272,11 @@ raw   = 0.6 × 감시비율 + 0.4 × 중립비율 − 0.5 × 복제비율      �
 ## 스택
 
 - **파이프라인** — Python 3.11, SQLite, Kiwi(형태소), trafilatura(본문 추출), Anthropic SDK
-- **대시보드** — Next.js 15 (App Router), TypeScript, Tailwind CSS, 인라인 SVG 차트
+- **대시보드** — Next.js 16 (App Router, 정적 export), TypeScript, Tailwind CSS, 인라인 SVG 차트
+- **자동화** — GitHub Actions (일일 분석 + Pages 배포)
 
 파이프라인이 JSON 을 떨구고 웹이 그걸 읽는 구조입니다. 네이티브 모듈(better-sqlite3)
 빌드를 피하고, 나중에 DB 를 바꾸더라도 JSON 계약만 지키면 프런트를 건드릴 필요가 없습니다.
+
+GitHub Pages 는 정적 호스팅이라 서버 런타임이 없습니다. 그래서 API 라우트를 쓰지 않고,
+문장 대조 데이터는 빌드 시 `web/public/data/` 로 복사해 정적 파일로 서빙합니다.

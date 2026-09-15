@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Outlet } from "@/lib/types";
+import type { Outlet, OutletCumulative } from "@/lib/types";
 
 type SortKey = "autonomy_score" | "duplication_rate" | "watchdog_rate" | "articles";
 
@@ -20,9 +20,29 @@ function Bar({ pct, color, width = 72 }: { pct: number; color: string; width?: n
   );
 }
 
-export function OutletTable({ outlets, minArticles }: { outlets: Outlet[]; minArticles: number }) {
+function isCumulative(o: Outlet | OutletCumulative): o is OutletCumulative {
+  return "activeDays" in o;
+}
+
+/** 추세는 색만으로 방향을 나타내지 않도록 화살표를 함께 씁니다. */
+function Trend({ value }: { value: number | null }) {
+  if (value === null) return <span className="text-muted">–</span>;
+  if (Math.abs(value) < 0.5) return <span className="tabular text-muted">0.0</span>;
+  const up = value > 0;
+  return (
+    <span className="tabular whitespace-nowrap"
+          style={{ color: up ? "var(--watchdog)" : "var(--dependent)" }}>
+      {up ? "↑" : "↓"} {Math.abs(value).toFixed(1)}
+    </span>
+  );
+}
+
+export function OutletTable({
+  outlets, minArticles,
+}: { outlets: (Outlet | OutletCumulative)[]; minArticles: number }) {
   const [sort, setSort] = useState<SortKey>("autonomy_score");
   const [showAll, setShowAll] = useState(false);
+  const cumulative = outlets.some(isCumulative);
 
   const ranked = outlets.filter((o) => o.sufficient_sample);
   const insufficient = outlets.filter((o) => !o.sufficient_sample);
@@ -48,15 +68,26 @@ export function OutletTable({ outlets, minArticles }: { outlets: Outlet[]; minAr
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[560px] border-collapse text-[13px]">
+        <table className={`w-full border-collapse text-[13px] ${cumulative ? "min-w-[700px]" : "min-w-[560px]"}`}>
           <thead>
             <tr className="border-b text-ink-2" style={{ borderColor: "var(--gridline)" }}>
               <th scope="col" className="px-2 py-2 text-left font-medium w-8">#</th>
               <th scope="col" className="px-3 py-2 text-left font-medium">언론사</th>
               {header("articles", "기사")}
+              {cumulative && (
+                <th scope="col" className="whitespace-nowrap px-3 py-2 text-right font-medium">
+                  보도일
+                </th>
+              )}
               {header("autonomy_score", "자율성", "0~100. 표본 보정 후 값")}
               {header("duplication_rate", "복제율", "보도자료와 유사도가 임계값 이상인 기사 비율")}
               {header("watchdog_rate", "감시%", "자체 검증 보도 비율")}
+              {cumulative && (
+                <th scope="col" className="whitespace-nowrap px-3 py-2 text-right font-medium"
+                    title="최근 7일 평균 자율성 점수 − 그 이전 평균">
+                  추세
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -76,6 +107,11 @@ export function OutletTable({ outlets, minArticles }: { outlets: Outlet[]; minAr
                   )}
                 </td>
                 <td className="tabular px-3 py-2.5 text-right text-ink-2">{o.articles}</td>
+                {cumulative && (
+                  <td className="tabular px-3 py-2.5 text-right text-muted">
+                    {isCumulative(o) ? o.activeDays : "–"}
+                  </td>
+                )}
                 <td className="px-3 py-2.5 text-right">
                   <Bar pct={o.autonomy_score} color="var(--watchdog)" />
                 </td>
@@ -85,6 +121,11 @@ export function OutletTable({ outlets, minArticles }: { outlets: Outlet[]; minAr
                 <td className="tabular px-3 py-2.5 text-right text-ink-2">
                   {o.watchdog_rate.toFixed(1)}%
                 </td>
+                {cumulative && (
+                  <td className="px-3 py-2.5 text-right text-[12px]">
+                    <Trend value={isCumulative(o) ? o.trend : null} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

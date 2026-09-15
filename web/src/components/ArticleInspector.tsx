@@ -21,7 +21,12 @@ function CategoryBadge({ category }: { category: Category | null }) {
   );
 }
 
-function DiffModal({ article, onClose }: { article: Article; onClose: () => void }) {
+// 정적 export 에는 서버 런타임이 없으므로 대조 상세는 public/ 의 정적 JSON 으로 가져옵니다.
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+function DiffModal({
+  article, date, onClose,
+}: { article: Article; date: string; onClose: () => void }) {
   const [detail, setDetail] = useState<Detail | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,12 +37,12 @@ function DiffModal({ article, onClose }: { article: Article; onClose: () => void
     let alive = true;
     setDetail(null);
     setError(null);
-    fetch(`/api/details/${article.id}`)
+    fetch(`${BASE_PATH}/data/details/${date}/${article.id}.json`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((d: Detail) => alive && setDetail(d))
       .catch((e: Error) => alive && setError(e.message));
     return () => { alive = false; };
-  }, [article.id, unmatched]);
+  }, [article.id, date, unmatched]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -120,7 +125,7 @@ function DiffModal({ article, onClose }: { article: Article; onClose: () => void
                             background: s.copied ? "color-mix(in srgb, var(--dependent) 14%, transparent)" : "transparent",
                             borderLeft: s.copied ? "2px solid var(--dependent)" : "2px solid transparent",
                           }}>
-                        <span className={s.text.startsWith("…") ? "text-muted italic" : ""}>{s.text}</span>
+                        <span>{s.text}</span>
                         {s.sim > 0 && (
                           <span className="tabular ml-2 whitespace-nowrap text-[11px] text-muted">
                             일치 {(s.sim * 100).toFixed(0)}%
@@ -149,8 +154,10 @@ function DiffModal({ article, onClose }: { article: Article; onClose: () => void
               </div>
 
               {detail.excerptOnly && (
-                <p className="mt-4 text-[11px] text-muted">
-                  저작권 보호를 위해 보도자료와 매칭된 문장만 표시합니다. 전문은 원문 링크에서 확인하세요.
+                <p className="mt-4 text-[11px] leading-relaxed text-muted">
+                  저작권 보호를 위해 보도자료와 매칭된 문장만 표시합니다
+                  {detail.omittedSentences > 0 && ` (비매칭 ${detail.omittedSentences}개 문장 생략)`}.
+                  전문은 원문 링크에서 확인하세요.
                 </p>
               )}
             </>
@@ -163,7 +170,9 @@ function DiffModal({ article, onClose }: { article: Article; onClose: () => void
 
 type Filter = "all" | "duplicated" | Category;
 
-export function ArticleInspector({ articles, threshold }: { articles: Article[]; threshold: number }) {
+export function ArticleInspector({
+  articles, threshold, date,
+}: { articles: Article[]; threshold: number; date: string }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [open, setOpen] = useState<Article | null>(null);
 
@@ -245,7 +254,7 @@ export function ArticleInspector({ articles, threshold }: { articles: Article[];
         )}
       </div>
 
-      {open && <DiffModal article={open} onClose={() => setOpen(null)} />}
+      {open && <DiffModal article={open} date={date} onClose={() => setOpen(null)} />}
     </div>
   );
 }

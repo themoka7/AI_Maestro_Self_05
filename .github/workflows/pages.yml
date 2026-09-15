@@ -1,0 +1,63 @@
+name: GitHub Pages 배포
+
+# 데이터가 갱신되거나(일일 분석 커밋) 대시보드 코드가 바뀌면 다시 배포합니다.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/history/**"
+      - "web/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포는 겹치면 안 되지만, 진행 중인 것을 취소하고 최신으로 덮는 편이 낫습니다.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - name: 의존성 설치
+        working-directory: web
+        run: npm ci
+
+      # 프로젝트 페이지는 https://<user>.github.io/<repo>/ 로 서빙되므로
+      # 모든 자산 경로에 /<repo> 접두사가 필요합니다. configure-pages 가 알려주는
+      # base_path 를 그대로 씁니다 (사용자/조직 페이지면 빈 문자열).
+      - name: 정적 빌드
+        working-directory: web
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

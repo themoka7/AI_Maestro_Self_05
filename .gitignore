@@ -8,8 +8,8 @@ data/*.db-*
 web/node_modules/
 web/.next/
 web/out/
-# 합성 데모 데이터가 실제 분석 결과로 오인되지 않도록 산출물은 커밋하지 않습니다.
-web/data/
+# prepare-data 가 data/history 에서 복사해 만드는 사본 (원본만 커밋)
+web/public/data/
 
 # TypeScript incremental build info
 web/*.tsbuildinfo

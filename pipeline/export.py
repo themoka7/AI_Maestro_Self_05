@@ -4,6 +4,9 @@ Next.js 가 SQLite 를 직접 읽게 하면 네이티브 모듈(better-sqlite3) 
 파이프라인이 JSON 을 떨궈 두고 웹은 그걸 읽는 구조가 훨씬 단순하고, 나중에 DB 로
 갈아타더라도 이 JSON 계약만 유지하면 프런트는 건드릴 필요가 없습니다.
 
+산출물은 data/history/ 에 날짜별로 쌓입니다. GitHub Actions 러너는 매번 초기화되므로
+이 JSON 이 리포지토리에 커밋되는 단일 저장소이고, SQLite 는 매 실행마다 재구성됩니다.
+
 저작권 주의: 기본값은 --excerpt-only 로, 보도자료와 매칭된 문장만 내보냅니다.
 기사 전문을 그대로 실어 공개하면 복제를 지적하는 서비스가 복제를 하는 꼴이 됩니다.
 """
@@ -21,8 +24,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect  # noqa: E402
 from score import compute  # noqa: E402
 
-OUT_DIR = Path(__file__).resolve().parents[1] / "web" / "data"
-REDACTED = "…(비매칭 문장 생략)"
+OUT_DIR = Path(__file__).resolve().parents[1] / "data" / "history"
+# 대조 화면을 만들 가치가 있는 최소 유사도. 이 아래는 보여줄 게 없습니다.
+DETAIL_MIN_SIMILARITY = 0.20
 
 
 def build_articles(conn, date: str, dup_threshold: float) -> list[dict]:
@@ -79,6 +83,14 @@ def build_articles(conn, date: str, dup_threshold: float) -> list[dict]:
 
 
 def build_detail(conn, article_id: str, excerpt_only: bool) -> dict | None:
+    """문장 대조 데이터. 저장 용량이 기사 수 x 문장 수로 불어나므로 두 가지를 줄입니다.
+
+      1. 보도자료와 매칭되지 않은 문장은 아예 넣지 않습니다.
+         excerpt 모드에서 어차피 가려질 것이라 자리만 차지했고, 실제 기사에서는
+         이런 문장이 전체의 절반을 넘습니다. 몇 개를 생략했는지만 남깁니다.
+      2. 유사도가 바닥인 기사는 파일을 만들지 않습니다.
+         대조 화면에 보여줄 것이 없는데 리포지토리에 매일 쌓일 이유가 없습니다.
+    """
     row = conn.execute(
         """SELECT m.sentence_map, m.doc_score, m.copied_sentence_ratio,
                   p.title AS pr_title, p.url AS pr_url, p.source_name
@@ -88,13 +100,17 @@ def build_detail(conn, article_id: str, excerpt_only: bool) -> dict | None:
     ).fetchone()
     if not row:
         return None
+    if max(row["doc_score"], row["copied_sentence_ratio"]) < DETAIL_MIN_SIMILARITY:
+        return None
 
     smap = json.loads(row["sentence_map"])
     if excerpt_only:
-        smap = [
-            s if s["sim"] > 0 else {**s, "text": REDACTED, "pr_text": None}
-            for s in smap
-        ]
+        kept = [s for s in smap if s["sim"] > 0]
+        omitted = len(smap) - len(kept)
+        smap = kept
+    else:
+        omitted = 0
+
     return {
         "articleId": article_id,
         "pressRelease": {
@@ -103,6 +119,7 @@ def build_detail(conn, article_id: str, excerpt_only: bool) -> dict | None:
         "docScore": round(row["doc_score"] * 100, 1),
         "copiedSentenceRatio": round(row["copied_sentence_ratio"] * 100, 1),
         "sentences": smap,
+        "omittedSentences": omitted,
         "excerptOnly": excerpt_only,
     }
 
@@ -155,14 +172,14 @@ def main() -> int:
     }
 
     out = Path(args.out)
-    details_dir = out / "details"
+    daily_dir = out / "daily"
+    details_dir = out / "details" / args.date
+    daily_dir.mkdir(parents=True, exist_ok=True)
     if details_dir.exists():
         shutil.rmtree(details_dir)
     details_dir.mkdir(parents=True, exist_ok=True)
 
-    (out / f"summary-{args.date}.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    (out / "latest.json").write_text(
+    (daily_dir / f"{args.date}.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     n_detail = 0
@@ -173,10 +190,14 @@ def main() -> int:
                 json.dumps(detail, ensure_ascii=False, indent=2), encoding="utf-8")
             n_detail += 1
 
+    from history import rebuild_index
+    dates = rebuild_index()
+
     print(f"내보내기 완료 → {out}")
-    print(f"  latest.json / summary-{args.date}.json  (기사 {len(articles)}건, "
+    print(f"  daily/{args.date}.json  (기사 {len(articles)}건, "
           f"언론사 {len(scores['outlets'])}곳)")
-    print(f"  details/*.json  {n_detail}건"
+    print(f"  보유 날짜 {len(dates)}일")
+    print(f"  details/{args.date}/*.json  {n_detail}건"
           + ("  [매칭 문장만]" if not args.full_text else "  [전문 포함 — 공개 배포 금지]"))
     if golden == 0:
         print("  ⚠ 검증 라벨 0건 — evaluate.py 로 검증 전에는 대외 공개 금지")

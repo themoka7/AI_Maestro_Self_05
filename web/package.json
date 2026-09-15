@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "prepare-data": "node scripts/prepare-data.mjs",
+    "dev": "npm run prepare-data && next dev",
+    "prebuild": "npm run prepare-data",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

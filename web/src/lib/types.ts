@@ -52,6 +52,32 @@ export interface Article {
   pressRelease: PressRelease | null;
 }
 
+export interface DailyPoint {
+  date: string;
+  articles: number;
+  duplication_rate: number;
+  watchdog_rate: number;
+  autonomy_score: number;
+}
+
+/** 날짜를 가로지르는 언론사별 집계. 일별 비율의 평균이 아니라 원시 건수 합산 기준. */
+export interface OutletCumulative extends Outlet {
+  activeDays: number;
+  /** 최근 7일 평균 자율성 − 그 이전 평균. 데이터가 부족하면 null. */
+  trend: number | null;
+  series: DailyPoint[];
+}
+
+export interface OutletAggregate {
+  event: { id: string; name: string; description: string };
+  window: { from: string; to: string; days: number };
+  generatedAt: string;
+  params: { duplication_threshold: number; prior_weight: number; min_articles: number };
+  totals: Totals;
+  daily: (Totals & { date: string })[];
+  outlets: OutletCumulative[];
+}
+
 export interface Summary {
   event: { id: string; name: string; description: string };
   date: string;
@@ -85,6 +111,8 @@ export interface Detail {
   docScore: number;
   copiedSentenceRatio: number;
   sentences: SentenceMatch[];
+  /** excerpt 모드에서 저장하지 않은 비매칭 문장 수 */
+  omittedSentences: number;
   excerptOnly: boolean;
 }
 
