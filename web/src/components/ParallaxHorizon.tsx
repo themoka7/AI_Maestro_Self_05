@@ -36,7 +36,23 @@ function useNarrow(): boolean {
   return narrow;
 }
 
-export function ParallaxHorizon({ outlets }: { outlets: OutletCumulative[] }) {
+/**
+ * 기준선으로부터의 거리.
+ *
+ * 분류(Anthropic 키)가 있으면 자율성 점수를 씁니다. 없으면 100 − 복제율을 씁니다 —
+ * 보도자료를 그대로 옮길수록 기준선에 붙는다는 뜻이라 은유가 그대로 성립하고,
+ * 복제율은 순수 텍스트 비교라 키 없이도 항상 계산됩니다.
+ */
+function distance(o: OutletCumulative): number {
+  return o.autonomy_score ?? Math.max(0, 100 - o.duplication_rate);
+}
+
+export function ParallaxHorizon({
+  outlets, hasClassification,
+}: {
+  outlets: OutletCumulative[];
+  hasClassification: boolean;
+}) {
   const [hover, setHover] = useState<string | null>(null);
   const narrow = useNarrow();
   const { W, H, horizon: HORIZON, padX: PAD_X, rise: MAX_RISE, label, axis, max } =
@@ -49,10 +65,10 @@ export function ParallaxHorizon({ outlets }: { outlets: OutletCumulative[] }) {
   const placed = shown.map((o, i) => ({
     ...o,
     x: shown.length > 1 ? PAD_X + i * step : W / 2,
-    y: HORIZON - (o.autonomy_score / 100) * MAX_RISE,
+    y: HORIZON - (distance(o) / 100) * MAX_RISE,
   }));
 
-  const highest = placed.reduce((a, b) => (b.autonomy_score > a.autonomy_score ? b : a));
+  const highest = placed.reduce((a, b) => (distance(b) > distance(a) ? b : a));
   const active = hover ? placed.find((p) => p.outlet === hover) : null;
 
   return (
@@ -63,7 +79,7 @@ export function ParallaxHorizon({ outlets }: { outlets: OutletCumulative[] }) {
         role="img"
         aria-label={
           `보도자료 기준선으로부터의 거리. ` +
-          placed.map((p) => `${p.outlet} ${p.autonomy_score}`).join(", ")
+          placed.map((p) => `${p.outlet} ${distance(p).toFixed(0)}`).join(", ")
         }
         onMouseLeave={() => setHover(null)}
       >
@@ -144,16 +160,19 @@ export function ParallaxHorizon({ outlets }: { outlets: OutletCumulative[] }) {
           {active ? (
             <span>
               <b style={{ color: "#fff" }}>{active.outlet}</b> · 기준선에서{" "}
-              <b style={{ color: "#fff" }}>{active.autonomy_score}</b> 만큼 떨어짐 ·
-              복제율 {active.duplication_rate}% · 감시 보도 {active.watchdog_rate}% ·
+              <b style={{ color: "#fff" }}>{distance(active).toFixed(1)}</b> 만큼 떨어짐 ·
+              복제율 {active.duplication_rate}%
+              {active.watchdog_rate !== null && ` · 감시 보도 ${active.watchdog_rate}%`} ·
               기사 {active.articles}건 / {active.activeDays}일
             </span>
           ) : (
             <span>
               지평선은 공식 보도자료입니다. 각 매체가 그 선에서 얼마나 떠올랐는지가
               자체 취재의 거리이며, 가장 높이 오른 곳은{" "}
-              <b style={{ color: "#fff" }}>{highest.outlet}</b>({highest.autonomy_score})입니다.
-              점 위에 올리면 세부 수치를 봅니다.
+              <b style={{ color: "#fff" }}>{highest.outlet}</b>
+              ({distance(highest).toFixed(1)})입니다.
+              {!hasClassification && " 분류가 없어 복제율만으로 거리를 잡았습니다."}
+              {" "}점 위에 올리면 세부 수치를 봅니다.
             </span>
           )}
         </div>

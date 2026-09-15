@@ -1,25 +1,28 @@
 export type Category = "Watchdog" | "Cheerleader" | "Neutral";
 
+/** 분류(Anthropic 키)가 없으면 프레이밍 관련 비율은 null 입니다. 복제율은 항상 있습니다. */
 export interface Totals {
   articles: number;
-  watchdog_rate: number;
-  cheerleader_rate: number;
-  neutral_rate: number;
+  watchdog_rate: number | null;
+  cheerleader_rate: number | null;
+  neutral_rate: number | null;
   duplication_rate: number;
 }
 
 export interface Outlet {
   outlet: string;
   articles: number;
+  /** 분류가 완료된 기사 수. 0 이면 프레이밍 지표가 전부 null 입니다. */
+  classified: number;
   watchdog: number;
   cheerleader: number;
   neutral: number;
   duplicated: number;
-  watchdog_rate: number;
-  cheerleader_rate: number;
-  neutral_rate: number;
+  watchdog_rate: number | null;
+  cheerleader_rate: number | null;
+  neutral_rate: number | null;
   duplication_rate: number;
-  autonomy_score: number;
+  autonomy_score: number | null;
   sufficient_sample: boolean;
   rank: number | null;
 }
@@ -56,8 +59,8 @@ export interface DailyPoint {
   date: string;
   articles: number;
   duplication_rate: number;
-  watchdog_rate: number;
-  autonomy_score: number;
+  watchdog_rate: number | null;
+  autonomy_score: number | null;
 }
 
 /** 날짜를 가로지르는 언론사별 집계. 일별 비율의 평균이 아니라 원시 건수 합산 기준. */
@@ -74,6 +77,8 @@ export interface OutletAggregate {
   generatedAt: string;
   params: { duplication_threshold: number; prior_weight: number; min_articles: number };
   demo?: boolean;
+  hasClassification: boolean;
+  classifiedArticles: number;
   totals: Totals;
   daily: (Totals & { date: string })[];
   outlets: OutletCumulative[];
@@ -93,6 +98,8 @@ export interface Summary {
   outlets: Outlet[];
   articles: Article[];
   coverage: Record<string, number>;
+  hasClassification?: boolean;
+  classifiedArticles?: number;
   goldenLabeled: number;
   excerptOnly: boolean;
   /** 합성 데모 데이터 여부 (분류가 전부 mock). 공개 화면에서 실측과 구분합니다. */

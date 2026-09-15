@@ -9,13 +9,15 @@
     "to": "2026-09-14",
     "days": 5
   },
-  "generatedAt": "2026-09-15T17:49:28.312001+09:00",
+  "generatedAt": "2026-09-15T18:40:38.669491+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
     "min_articles": 5
   },
   "demo": true,
+  "hasClassification": true,
+  "classifiedArticles": 105,
   "totals": {
     "articles": 105,
     "watchdog_rate": 23.8,
@@ -69,6 +71,7 @@
     {
       "outlet": "물결신문",
       "articles": 10,
+      "classified": 10,
       "activeDays": 5,
       "watchdog": 10,
       "cheerleader": 0,
@@ -123,6 +126,7 @@
     {
       "outlet": "나루탐사",
       "articles": 5,
+      "classified": 5,
       "activeDays": 5,
       "watchdog": 5,
       "cheerleader": 0,
@@ -177,6 +181,7 @@
     {
       "outlet": "노을방송",
       "articles": 10,
+      "classified": 10,
       "activeDays": 5,
       "watchdog": 0,
       "cheerleader": 5,
@@ -231,6 +236,7 @@
     {
       "outlet": "하늘일보",
       "articles": 15,
+      "classified": 15,
       "activeDays": 5,
       "watchdog": 5,
       "cheerleader": 5,
@@ -285,6 +291,7 @@
     {
       "outlet": "갯벌뉴스",
       "articles": 25,
+      "classified": 25,
       "activeDays": 5,
       "watchdog": 5,
       "cheerleader": 10,
@@ -339,6 +346,7 @@
     {
       "outlet": "가온통신",
       "articles": 15,
+      "classified": 15,
       "activeDays": 5,
       "watchdog": 0,
       "cheerleader": 10,
@@ -393,6 +401,7 @@
     {
       "outlet": "등대일보",
       "articles": 15,
+      "classified": 15,
       "activeDays": 5,
       "watchdog": 0,
       "cheerleader": 10,
@@ -447,6 +456,7 @@
     {
       "outlet": "바다신문",
       "articles": 10,
+      "classified": 10,
       "activeDays": 5,
       "watchdog": 0,
       "cheerleader": 10,

@@ -25,7 +25,7 @@ from score import normalize, shrink  # noqa: E402
 KST = timezone(timedelta(hours=9), "KST")
 OUT_FILE = HISTORY / "outlets.json"
 
-COUNT_FIELDS = ("articles", "watchdog", "cheerleader", "neutral", "duplicated")
+COUNT_FIELDS = ("articles", "classified", "watchdog", "cheerleader", "neutral", "duplicated")
 
 
 def load_daily(days: int | None) -> list[dict]:
@@ -71,7 +71,7 @@ def main() -> int:
                 "series": [],
             })
             for f in COUNT_FIELDS:
-                entry[f] += o[f]
+                entry[f] += o.get(f, 0) or 0
             entry["days"] += 1
             entry["series"].append({
                 "date": date,
@@ -86,45 +86,57 @@ def main() -> int:
         print("집계할 기사가 없습니다.")
         return 1
 
-    g_w = sum(e["watchdog"] for e in acc.values()) / total
-    g_n = sum(e["neutral"] for e in acc.values()) / total
-    g_c = sum(e["cheerleader"] for e in acc.values()) / total
+    # 분류 비율의 분모는 분류된 기사 수입니다 (전체 기사가 아니라).
+    classified_total = sum(e["classified"] for e in acc.values())
+    has_classification = classified_total > 0
+    denom = classified_total or 1
+    g_w = sum(e["watchdog"] for e in acc.values()) / denom
+    g_n = sum(e["neutral"] for e in acc.values()) / denom
+    g_c = sum(e["cheerleader"] for e in acc.values()) / denom
     g_d = sum(e["duplicated"] for e in acc.values()) / total
 
     outlets = []
     for e in acc.values():
         n = e["articles"]
-        w = shrink(e["watchdog"], n, g_w, prior)
-        neu = shrink(e["neutral"], n, g_n, prior)
+        k = e["classified"]
         dup = shrink(e["duplicated"], n, g_d, prior)
-        raw = 0.6 * w + 0.4 * neu - 0.5 * dup
+        if k:
+            w = shrink(e["watchdog"], k, g_w, prior)
+            neu = shrink(e["neutral"], k, g_n, prior)
+            autonomy = normalize(0.6 * w + 0.4 * neu - 0.5 * dup)
+        else:
+            autonomy = None
 
         series = sorted(e["series"], key=lambda s: s["date"])
         # 최근 7일 대 그 이전의 자율성 점수 변화 (추세)
-        recent = [s["autonomy_score"] for s in series[-7:]]
-        prior_window = [s["autonomy_score"] for s in series[:-7]]
+        recent = [s["autonomy_score"] for s in series[-7:] if s["autonomy_score"] is not None]
+        prior_window = [s["autonomy_score"] for s in series[:-7] if s["autonomy_score"] is not None]
         trend = (round(sum(recent) / len(recent) - sum(prior_window) / len(prior_window), 1)
                  if recent and prior_window else None)
 
         outlets.append({
             "outlet": e["outlet"],
             "articles": n,
+            "classified": k,
             "activeDays": e["days"],
             "watchdog": e["watchdog"],
             "cheerleader": e["cheerleader"],
             "neutral": e["neutral"],
             "duplicated": e["duplicated"],
-            "watchdog_rate": round(e["watchdog"] / n * 100, 1),
-            "cheerleader_rate": round(e["cheerleader"] / n * 100, 1),
-            "neutral_rate": round(e["neutral"] / n * 100, 1),
+            "watchdog_rate": round(e["watchdog"] / k * 100, 1) if k else None,
+            "cheerleader_rate": round(e["cheerleader"] / k * 100, 1) if k else None,
+            "neutral_rate": round(e["neutral"] / k * 100, 1) if k else None,
             "duplication_rate": round(e["duplicated"] / n * 100, 1),
-            "autonomy_score": normalize(raw),
+            "autonomy_score": autonomy,
             "sufficient_sample": n >= min_articles,
             "trend": trend,
             "series": series,
         })
 
-    outlets.sort(key=lambda o: (o["sufficient_sample"], o["autonomy_score"]), reverse=True)
+    if has_classification:
+        outlets.sort(key=lambda o: (o["sufficient_sample"], o["autonomy_score"] or 0), reverse=True)
+    else:
+        outlets.sort(key=lambda o: (not o["sufficient_sample"], o["duplication_rate"]))
     for i, o in enumerate(outlets, 1):
         o["rank"] = i if o["sufficient_sample"] else None
 
@@ -136,11 +148,13 @@ def main() -> int:
         "params": dailies[-1]["params"],
         # 한 날이라도 실측이 섞여 있으면 데모가 아닙니다. 보수적으로 판단합니다.
         "demo": all(d.get("demo") for d in dailies),
+        "hasClassification": has_classification,
+        "classifiedArticles": classified_total,
         "totals": {
             "articles": total,
-            "watchdog_rate": round(g_w * 100, 1),
-            "cheerleader_rate": round(g_c * 100, 1),
-            "neutral_rate": round(g_n * 100, 1),
+            "watchdog_rate": round(g_w * 100, 1) if has_classification else None,
+            "cheerleader_rate": round(g_c * 100, 1) if has_classification else None,
+            "neutral_rate": round(g_n * 100, 1) if has_classification else None,
             "duplication_rate": round(g_d * 100, 1),
         },
         "daily": [
@@ -152,18 +166,26 @@ def main() -> int:
     OUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     OUT_FILE.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    t = payload["totals"]
     print(f"누적 집계 {dates[0]} ~ {dates[-1]} ({len(dates)}일, 기사 {total}건)")
-    print(f"  전체: 복제 {payload['totals']['duplication_rate']}% | "
-          f"감시 {payload['totals']['watchdog_rate']}% | "
-          f"홍보 {payload['totals']['cheerleader_rate']}%\n")
+    if has_classification:
+        print(f"  전체: 복제 {t['duplication_rate']}% | 감시 {t['watchdog_rate']}% | "
+              f"홍보 {t['cheerleader_rate']}%\n")
+    else:
+        print(f"  전체: 복제 {t['duplication_rate']}%")
+        print("  분류 결과가 없어 자율성 점수는 비어 있습니다 (ANTHROPIC_API_KEY 필요).\n")
+
+    def fmt(v):
+        return f"{v:>8.1f}" if isinstance(v, (int, float)) else f"{'-':>8}"
+
     print(f"{'순위':<5}{'언론사':<18}{'기사':>5}{'일수':>5}{'자율성':>8}{'복제%':>8}{'감시%':>8}{'추세':>7}")
     for o in outlets:
         rank = str(o["rank"]) if o["rank"] else "-"
         trend = f"{o['trend']:+.1f}" if o["trend"] is not None else "–"
         mark = "" if o["sufficient_sample"] else "  (표본부족)"
         print(f"{rank:<5}{o['outlet']:<18}{o['articles']:>5}{o['activeDays']:>5}"
-              f"{o['autonomy_score']:>8.1f}{o['duplication_rate']:>8.1f}"
-              f"{o['watchdog_rate']:>8.1f}{trend:>7}{mark}")
+              f"{fmt(o['autonomy_score'])}{fmt(o['duplication_rate'])}"
+              f"{fmt(o['watchdog_rate'])}{trend:>7}{mark}")
     print(f"\n→ {OUT_FILE}")
     return 0
 

@@ -76,6 +76,8 @@ jobs:
       - name: 보도자료 매칭
         run: python pipeline/match.py --date "${{ steps.target.outputs.date }}"
 
+      # 분류는 선택 단계입니다. 키가 없으면 건너뛰고 복제율 지표만 산출합니다.
+      # 여기서 실패시키면 이미 수집한 기사와 이미 지불한 검색 API 호출까지 버려집니다.
       - name: 프레이밍 분류
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -83,7 +85,7 @@ jobs:
         run: |
           python pipeline/classify.py \
             --date "${{ steps.target.outputs.date }}" \
-            --poll 30 --max-wait 3600
+            --poll 30 --max-wait 3600 --allow-missing-key
 
       - name: 일별 결과 내보내기
         run: python pipeline/export.py --date "${{ steps.target.outputs.date }}"

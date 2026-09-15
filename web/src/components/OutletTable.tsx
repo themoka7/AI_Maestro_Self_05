@@ -46,9 +46,13 @@ export function OutletTable({
 
   const ranked = outlets.filter((o) => o.sufficient_sample);
   const insufficient = outlets.filter((o) => !o.sufficient_sample);
-  const shown = [...(showAll ? [...ranked, ...insufficient] : ranked)].sort(
-    (a, b) => (b[sort] as number) - (a[sort] as number)
-  );
+  // 값이 없는 항목(분류 미수행)은 정렬에서 뒤로 보냅니다.
+  const shown = [...(showAll ? [...ranked, ...insufficient] : ranked)].sort((a, b) => {
+    const av = a[sort], bv = b[sort];
+    if (av === null) return 1;
+    if (bv === null) return -1;
+    return (bv as number) - (av as number);
+  });
 
   const header = (key: SortKey, label: string, hint?: string) => (
     <th scope="col" className="whitespace-nowrap px-3 py-2 text-right font-medium">
@@ -113,13 +117,16 @@ export function OutletTable({
                   </td>
                 )}
                 <td className="px-3 py-2.5 text-right">
-                  <Bar pct={o.autonomy_score} color="var(--watchdog)" />
+                  {o.autonomy_score === null
+                    ? <span className="text-muted">–</span>
+                    : <Bar pct={o.autonomy_score} color="var(--watchdog)" />}
                 </td>
                 <td className="px-3 py-2.5 text-right">
                   <Bar pct={o.duplication_rate} color="var(--dependent)" />
                 </td>
                 <td className="tabular px-3 py-2.5 text-right text-ink-2">
-                  {o.watchdog_rate.toFixed(1)}%
+                  {o.watchdog_rate === null ? <span className="text-muted">–</span>
+                    : `${o.watchdog_rate.toFixed(1)}%`}
                 </td>
                 {cumulative && (
                   <td className="px-3 py-2.5 text-right text-[12px]">

@@ -173,12 +173,21 @@ def main() -> int:
     ap.add_argument("--sync", action="store_true", help="배치 대신 동기 호출 (소량 테스트용)")
     ap.add_argument("--recheck", action="store_true", help="이미 분류된 기사도 다시 분류")
     ap.add_argument("--poll", type=int, default=30, help="배치 상태 폴링 간격(초)")
+    ap.add_argument("--allow-missing-key", action="store_true",
+                    help="ANTHROPIC_API_KEY 가 없으면 실패 대신 건너뜁니다. "
+                         "분류만 빠지고 복제율 지표는 그대로 산출됩니다.")
     ap.add_argument("--max-wait", type=int, default=0,
                     help="배치 최대 대기 시간(초). 0=무제한. CI 에서는 반드시 지정하세요.")
     args = ap.parse_args()
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("ANTHROPIC_API_KEY 가 없습니다. .env 를 확인하세요.", file=sys.stderr)
+        # 분류는 전체 파이프라인에서 선택적인 단계입니다. 키가 없다고 여기서 죽으면
+        # 이미 수집한 기사와 이미 지불한 검색 API 호출까지 통째로 버려집니다.
+        msg = "ANTHROPIC_API_KEY 가 없어 프레이밍 분류를 건너뜁니다. 복제율 지표는 그대로 산출됩니다."
+        if args.allow_missing_key:
+            print(f"⚠ {msg}", file=sys.stderr)
+            return 0
+        print(f"{msg}\n(파이프라인에서 계속 진행하려면 --allow-missing-key)", file=sys.stderr)
         return 2
 
     from anthropic import Anthropic

@@ -81,10 +81,16 @@ export default async function DashboardPage() {
             <br className="hidden sm:inline" />
             공식 보도자료를 기준점에 두고, 각 언론사가 그 선에서 얼마나 떨어져 있는지 잽니다.
           </p>
+          {!aggregate.hasClassification && (
+            <p className="mt-3 max-w-2xl text-[12px] leading-relaxed text-muted">
+              프레이밍 분류가 아직 없어 거리는 <b>복제율만으로</b> 잡았습니다.
+              보도자료를 그대로 옮길수록 기준선에 붙습니다.
+            </p>
+          )}
         </div>
 
         <div className="mt-10">
-          <ParallaxHorizon outlets={outlets} />
+          <ParallaxHorizon outlets={outlets} hasClassification={aggregate.hasClassification} />
         </div>
       </section>
 
@@ -95,9 +101,14 @@ export default async function DashboardPage() {
           <StatTile label="보도자료 복제" value={totals.duplication_rate} unit="%"
                     accent="var(--dependent)" mark="▲"
                     note={`유사도 ${Math.round(params.duplication_threshold * 100)}% 이상`} />
-          <StatTile label="자체 검증" value={totals.watchdog_rate} unit="%"
-                    accent="var(--watchdog)" mark="◆"
-                    note="예산·안전·부실 취재" />
+          {totals.watchdog_rate === null ? (
+            <StatTile label="자체 검증" value="–"
+                      note="분류 미수행 · ANTHROPIC_API_KEY 필요" />
+          ) : (
+            <StatTile label="자체 검증" value={totals.watchdog_rate} unit="%"
+                      accent="var(--watchdog)" mark="◆"
+                      note="예산·안전·부실 취재" />
+          )}
           <StatTile label="기준선에 가장 가까운 곳" value={mostDependent?.outlet ?? "–"}
                     note={mostDependent
                       ? `복제율 ${mostDependent.duplication_rate}% · 기사 ${mostDependent.articles}건`
@@ -116,13 +127,23 @@ export default async function DashboardPage() {
             <DailyTrend daily={aggregate.daily} />
           </Section>
           <Section title="프레이밍 분포" note={`${summary.date} 하루치`} className="lg:col-span-2">
-            <FramingDonut
-              watchdog={summary.totals.watchdog_rate}
-              neutral={summary.totals.neutral_rate}
-              cheerleader={summary.totals.cheerleader_rate}
-              counts={counts}
-              total={summary.totals.articles}
-            />
+            {summary.totals.watchdog_rate === null ? (
+              <p className="py-8 text-center text-[12px] leading-relaxed text-muted">
+                분류 결과가 없습니다.
+                <br />
+                <code>ANTHROPIC_API_KEY</code> 를 설정하면 감시·홍보·중립 분포가 표시됩니다.
+                <br />
+                복제율 지표는 키 없이도 계산됩니다.
+              </p>
+            ) : (
+              <FramingDonut
+                watchdog={summary.totals.watchdog_rate}
+                neutral={summary.totals.neutral_rate ?? 0}
+                cheerleader={summary.totals.cheerleader_rate ?? 0}
+                counts={counts}
+                total={summary.totals.articles}
+              />
+            )}
           </Section>
         </div>
 

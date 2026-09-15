@@ -32,8 +32,22 @@ export function DailyTrend({ daily }: { daily: Point[] }) {
   const x = (i: number) => PAD.left + (i / (daily.length - 1)) * innerW;
   const y = (v: number) => PAD.top + innerH - (v / 100) * innerH;
 
-  const line = (key: "duplication_rate" | "watchdog_rate") =>
-    daily.map((d, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(d[key]).toFixed(1)}`).join(" ");
+  const hasWatchdog = daily.some((d) => d.watchdog_rate !== null);
+
+  /** 값이 없는 날은 선을 잇지 않고 끊습니다. 0 으로 채우면 없는 하락을 그리게 됩니다. */
+  const line = (key: "duplication_rate" | "watchdog_rate") => {
+    let started = false;
+    return daily
+      .map((d, i) => {
+        const v = d[key];
+        if (v === null) { started = false; return ""; }
+        const cmd = started ? "L" : "M";
+        started = true;
+        return `${cmd}${x(i).toFixed(1)},${y(v).toFixed(1)}`;
+      })
+      .join(" ")
+      .trim();
+  };
 
   const active = hover !== null ? daily[hover] : null;
   // 라벨이 겹치지 않도록 눈금은 최대 6개만 찍습니다.
@@ -47,11 +61,15 @@ export function DailyTrend({ daily }: { daily: Point[] }) {
           <span className="text-ink-2">보도자료 복제율</span>
           {active && <span className="tabular font-medium">{active.duplication_rate}%</span>}
         </span>
-        <span className="flex items-center gap-1.5">
-          <span aria-hidden className="inline-block h-[2px] w-4" style={{ background: "var(--watchdog)" }} />
-          <span className="text-ink-2">자체 검증 비율</span>
-          {active && <span className="tabular font-medium">{active.watchdog_rate}%</span>}
-        </span>
+        {hasWatchdog && (
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden className="inline-block h-[2px] w-4" style={{ background: "var(--watchdog)" }} />
+            <span className="text-ink-2">자체 검증 비율</span>
+            {active?.watchdog_rate != null && (
+              <span className="tabular font-medium">{active.watchdog_rate}%</span>
+            )}
+          </span>
+        )}
         <span className="ml-auto text-muted">
           {active ? `${active.date} · 기사 ${active.articles}건` : `${daily.length}일`}
         </span>
@@ -84,16 +102,20 @@ export function DailyTrend({ daily }: { daily: Point[] }) {
 
           <path d={line("duplication_rate")} fill="none" stroke="var(--dependent)"
                 strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-          <path d={line("watchdog_rate")} fill="none" stroke="var(--watchdog)"
-                strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          {hasWatchdog && (
+            <path d={line("watchdog_rate")} fill="none" stroke="var(--watchdog)"
+                  strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          )}
 
           {hover !== null && (
             <>
               {/* 표면 링을 둘러 겹치는 마크가 서로 묻히지 않게 합니다 */}
               <circle cx={x(hover)} cy={y(daily[hover].duplication_rate)} r={4.5}
                       fill="var(--dependent)" stroke="var(--surface-1)" strokeWidth={2} />
-              <circle cx={x(hover)} cy={y(daily[hover].watchdog_rate)} r={4.5}
-                      fill="var(--watchdog)" stroke="var(--surface-1)" strokeWidth={2} />
+              {daily[hover].watchdog_rate !== null && (
+                <circle cx={x(hover)} cy={y(daily[hover].watchdog_rate!)} r={4.5}
+                        fill="var(--watchdog)" stroke="var(--surface-1)" strokeWidth={2} />
+              )}
             </>
           )}
 

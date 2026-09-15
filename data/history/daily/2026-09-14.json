@@ -5,7 +5,7 @@
     "description": "공식 보도자료를 기준점으로, 각 언론사 보도가 그로부터 얼마나 떨어져 있는지 측정"
   },
   "date": "2026-09-14",
-  "generatedAt": "2026-09-15T08:49:28.207744+00:00",
+  "generatedAt": "2026-09-15T09:40:38.568562+00:00",
   "totals": {
     "articles": 21,
     "watchdog_rate": 23.8,
@@ -29,6 +29,7 @@
     {
       "outlet": "갯벌뉴스",
       "articles": 5,
+      "classified": 5,
       "watchdog": 1,
       "cheerleader": 2,
       "neutral": 2,
@@ -44,6 +45,7 @@
     {
       "outlet": "물결신문",
       "articles": 2,
+      "classified": 2,
       "watchdog": 2,
       "cheerleader": 0,
       "neutral": 0,
@@ -59,6 +61,7 @@
     {
       "outlet": "나루탐사",
       "articles": 1,
+      "classified": 1,
       "watchdog": 1,
       "cheerleader": 0,
       "neutral": 0,
@@ -74,6 +77,7 @@
     {
       "outlet": "하늘일보",
       "articles": 3,
+      "classified": 3,
       "watchdog": 1,
       "cheerleader": 1,
       "neutral": 1,
@@ -89,6 +93,7 @@
     {
       "outlet": "노을방송",
       "articles": 2,
+      "classified": 2,
       "watchdog": 0,
       "cheerleader": 1,
       "neutral": 1,
@@ -104,6 +109,7 @@
     {
       "outlet": "가온통신",
       "articles": 3,
+      "classified": 3,
       "watchdog": 0,
       "cheerleader": 2,
       "neutral": 1,
@@ -119,6 +125,7 @@
     {
       "outlet": "바다신문",
       "articles": 2,
+      "classified": 2,
       "watchdog": 0,
       "cheerleader": 2,
       "neutral": 0,
@@ -134,6 +141,7 @@
     {
       "outlet": "등대일보",
       "articles": 3,
+      "classified": 3,
       "watchdog": 0,
       "cheerleader": 2,
       "neutral": 1,
