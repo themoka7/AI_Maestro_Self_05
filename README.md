@@ -263,7 +263,34 @@ raw   = 0.6 × 감시비율 + 0.4 × 중립비율 − 0.5 × 복제비율      �
 
 ## 설정
 
-분석 대상 이벤트, 검색어, 보도자료 소스, 임계값은 전부 `config/event.yaml` 에 있습니다.
+### 보도자료 소스 — 여기를 채워야 복제율이 나옵니다
+
+`config/event.yaml` 의 `press_release_sources` 는 기본값이 `enabled: false` 이고
+선택자도 추측값입니다. **대조할 원본이 없으면 복제율이 전부 0 으로 나옵니다.**
+이 프로젝트에서 사람 손이 가장 많이 필요한 지점입니다.
+
+```bash
+# 1) 게시판 구조를 훑어 선택자 후보를 뽑습니다
+python scripts/inspect_board.py "https://www.yeosu.go.kr/..."
+
+# 2) 출력된 게시글 링크 하나로 본문 선택자도 확인합니다
+python scripts/inspect_board.py "https://.../list" --detail "https://.../view?id=123"
+
+# 3) config/event.yaml 에 넣고 enabled: true 로 바꾼 뒤 검증
+python pipeline/collect_pr.py --source yeosu-city
+```
+
+게시판이 JS 렌더링이거나 본문이 hwp/pdf 첨부에만 있으면 스크래핑이 안 됩니다.
+그럴 때는 JSON/JSONL 로 직접 밀어 넣으세요.
+
+```bash
+python pipeline/collect_pr.py --import press_releases.json
+# [{"url": "...", "title": "...", "body": "...", "published_at": "2026-09-14"}, ...]
+```
+
+### 그 밖의 설정
+
+분석 대상 이벤트, 검색어, 임계값은 전부 `config/event.yaml` 에 있습니다.
 이 파일만 바꾸면 다른 이벤트·지역 이슈로 그대로 재사용됩니다.
 
 언론사 도메인 매핑은 `pipeline/sources/outlets.py` 에 있고,
