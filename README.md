@@ -55,7 +55,32 @@ cp .env.example .env    # 키 채워넣기
 | 변수 | 발급처 | 비고 |
 |---|---|---|
 | `NCP_API_KEY_ID` / `NCP_API_KEY` | [NCP 콘솔](https://console.ncloud.com) → NAVER API HUB | 검색 API. 종량 과금 |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/settings/keys) | 분류용. Batch API 사용 |
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/settings/keys) | 프레이밍 분류용. Batch API 사용 |
+
+#### ANTHROPIC_API_KEY 는 어디에 쓰이나
+
+두 지표 중 **하나에만** 쓰입니다.
+
+| 지표 | 계산 방법 | 키 필요 |
+|---|---|---|
+| 보도자료 복제율 | 형태소 n-gram · 문장 정렬 (순수 텍스트 비교) | ❌ |
+| 프레이밍 분류 (감시/홍보/중립) | 언어모델 판단 | ✅ |
+
+복제율은 Kiwi 형태소 분석만으로 계산하므로 **Anthropic 키 없이도 나옵니다.**
+다만 자율성 점수 공식이 감시·중립 비율을 쓰기 때문에, 분류가 없으면 **언론사 순위가
+산출되지 않습니다.** 키 없이 돌리려면 `run.py --skip classify` 로 복제율만 볼 수 있습니다.
+
+**비용** — 기사 1건당 1회 호출이고 Batch API 는 50% 할인입니다.
+기사 본문 4,000자 기준 입력 약 3,000 토큰, 출력 약 200 토큰으로 잡은 추정치입니다.
+
+| 모델 | 100건/일 | 300건/일 |
+|---|---|---|
+| `claude-opus-5` (기본) | 약 $1/일 · $30/월 | 약 $3/일 · $90/월 |
+| `claude-sonnet-5` | 약 $0.4/일 · $12/월 | 약 $1.2/일 · $36/월 |
+| `claude-haiku-4-5` | 약 $0.2/일 · $6/월 | 약 $0.6/일 · $18/월 |
+
+한국어 토큰 수는 실측이 필요합니다. 첫 실행 뒤 실제 사용량으로 다시 계산하세요.
+모델은 `CLASSIFIER_MODEL` 환경변수(또는 Actions Variables)로 바꿉니다.
 
 > **검색 API 는 개발자센터에서 NAVER API HUB 로 이관되었습니다.**
 > 도메인 `openapi.naver.com` → `naverapihub.apigw.ntruss.com`,

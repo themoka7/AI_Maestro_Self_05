@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect  # noqa: E402
 
 KST = timezone(timedelta(hours=9), "KST")
-DEFAULT_MODEL = "claude-sonnet-5"
+DEFAULT_MODEL = "claude-opus-5"
 BODY_LIMIT = 4000
 
 SYSTEM = """당신은 언론 보도의 자율성과 보도자료 의존도를 분석하는 미디어 연구자입니다.

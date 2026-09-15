@@ -29,6 +29,18 @@
   --neutral-cat: #898781;
   --dependent: #e34948;
   --track: #e1e0d9;
+  /* 시차 지평선 — 하늘은 위로 옅어지고, 땅은 단단한 한 덩어리입니다.
+     흑백 실루엣 사진의 문법을 그대로 씁니다: 하드한 수평선, 넓은 여백, 색은 데이터에만. */
+  --sky-top: #f2f2f0;
+  --sky-bottom: #e4e4e0;
+  --ground: #121211;
+  --ground-text: rgba(255, 255, 255, 0.58);
+  --horizon-grid: rgba(11, 11, 11, 0.07);
+  --horizon-muted: rgba(11, 11, 11, 0.32);
+  --horizon-label: rgba(11, 11, 11, 0.55);
+  --horizon-stem: rgba(11, 11, 11, 0.28);
+  --horizon-mark: #52514e;
+  --horizon-edge: rgba(255, 255, 255, 0.22);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,6 +59,17 @@
     --neutral-cat: #686661;
     --dependent: #e66767;
     --track: #2c2c2a;
+
+    --sky-top: #272726;
+    --sky-bottom: #1a1a19;
+    --ground: #000000;
+    --ground-text: rgba(255, 255, 255, 0.5);
+    --horizon-grid: rgba(255, 255, 255, 0.08);
+    --horizon-muted: rgba(255, 255, 255, 0.34);
+    --horizon-label: rgba(255, 255, 255, 0.58);
+    --horizon-stem: rgba(255, 255, 255, 0.28);
+    --horizon-mark: #b6b4ad;
+    --horizon-edge: rgba(255, 255, 255, 0.28);
   }
 }
 
@@ -65,6 +88,17 @@
   --neutral-cat: #686661;
   --dependent: #e66767;
   --track: #2c2c2a;
+
+  --sky-top: #272726;
+  --sky-bottom: #1a1a19;
+  --ground: #000000;
+  --ground-text: rgba(255, 255, 255, 0.5);
+  --horizon-grid: rgba(255, 255, 255, 0.08);
+  --horizon-muted: rgba(255, 255, 255, 0.34);
+  --horizon-label: rgba(255, 255, 255, 0.58);
+  --horizon-stem: rgba(255, 255, 255, 0.28);
+  --horizon-mark: #b6b4ad;
+    --horizon-edge: rgba(255, 255, 255, 0.28);
 }
 
 body {
@@ -74,3 +108,9 @@ body {
 }
 
 .tabular { font-variant-numeric: tabular-nums; }
+
+/* 섹션 제목마다 얇은 기준선 — 지평선 모티프의 반복 */
+.rule-top {
+  border-top: 1px solid var(--text-primary);
+  padding-top: 10px;
+}
