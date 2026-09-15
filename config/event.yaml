@@ -1,0 +1,51 @@
+# 분석 대상 이벤트 정의
+# 이 파일만 바꾸면 다른 이벤트/지역 이슈로 그대로 재사용됩니다.
+
+event:
+  id: yeosu-island-expo-2026
+  name: 2026 여수세계섬박람회
+  description: 지자체 공식 보도자료 대비 복제율 및 언론사별 검증 vs 홍보 보도 실태
+
+# 네이버 뉴스 검색 API에 던질 쿼리 목록.
+# 네이버 검색 API는 기간 필터가 없어 sort=date 로 최신순 페이징하며 날짜로 잘라냅니다.
+# 쿼리 1건당 최대 1,000건까지만 접근 가능하므로 키워드를 여러 개로 쪼개 커버리지를 넓힙니다.
+queries:
+  - 여수세계섬박람회
+  - 여수 섬박람회
+  - 세계섬박람회 조직위원회
+  - 여수 박람회 예산
+  - 여수 박람회 안전
+
+# 보도자료 소스 (게시판 목록 → 상세 페이지 구조를 CSS 선택자로 기술)
+press_release_sources:
+  - id: yeosu-city
+    name: 여수시청 보도자료
+    # 실제 게시판 URL/선택자는 로컬에서 확인 후 채워 넣으세요.
+    # scripts/inspect_board.py 로 후보 선택자를 뽑아볼 수 있습니다.
+    list_url: "https://www.yeosu.go.kr/www/govt/news/report"
+    list_params:
+      page: "{page}"
+    selectors:
+      row: "table tbody tr"
+      link: "a"
+      date: "td:nth-last-child(2)"
+      detail_title: "h3, .board-view-title, .tit"
+      detail_body: ".board-view-content, .bbs-content, #contents"
+      detail_date: ".board-view-info, .info"
+    max_pages: 5
+    enabled: false   # 선택자 검증 전까지는 off. fixtures 로 대체됩니다.
+
+# 기사 ↔ 보도자료 매칭 시 후보로 볼 보도자료의 발행 시점 범위 (기사 기준)
+matching:
+  lookback_days: 7    # 기사보다 최대 7일 앞선 보도자료까지 후보
+  lookahead_days: 1   # 엠바고/시차 보정
+  # 문서 단위 복제 판정 임계값
+  duplication_threshold: 0.70
+  # 문장 단위 복제 판정 임계값 (이 값 이상이면 "그대로 옮긴 문장"으로 간주)
+  sentence_threshold: 0.85
+
+scoring:
+  # 언론사 랭킹에 표시할 최소 기사 수. 미만이면 별도 표기(표본 부족).
+  min_articles: 5
+  # 베이지안 shrinkage 사전 표본 크기. 표본 적은 매체가 1등 먹는 문제 방지.
+  prior_weight: 10

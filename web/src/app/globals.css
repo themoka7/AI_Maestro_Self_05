@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  데이터 색상 체계 — 발산형(diverging) 스케일.
+
+    감시(Watchdog) ←─────── 중립(Neutral) ───────→ 보도자료 의존(Cheerleader / 복제)
+       파랑                    회색                        빨강
+
+  복제율과 '홍보' 분류는 같은 구성개념(보도자료 의존)을 재므로 같은 색을 씁니다.
+  색 검증 결과 (validate_palette.js, --pairs all):
+    light  CVD ΔE 8.7 / normal ΔE 17.8 / 대비 3:1 이상 — 전 항목 통과
+    dark   CVD ΔE 9.0 / normal ΔE 20.3 / 대비 3:1 이상 — 전 항목 통과
+    (중립 회색의 채도 미달은 발산형 중립점의 정의상 의도된 것)
+*/
+:root {
+  color-scheme: light;
+  --surface-1: #fcfcfb;
+  --plane: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --gridline: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  --watchdog: #2a78d6;
+  --neutral-cat: #898781;
+  --dependent: #e34948;
+  --track: #e1e0d9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --plane: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --gridline: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+
+    --watchdog: #3987e5;
+    --neutral-cat: #686661;
+    --dependent: #e66767;
+    --track: #2c2c2a;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19;
+  --plane: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --gridline: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+
+  --watchdog: #3987e5;
+  --neutral-cat: #686661;
+  --dependent: #e66767;
+  --track: #2c2c2a;
+}
+
+body {
+  background: var(--plane);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
