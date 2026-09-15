@@ -1,0 +1,30 @@
+{
+  "articleId": "8b7ba95095c7daad",
+  "pressRelease": {
+    "title": "박람회 조직위, 해상 안전관리 종합대책 수립",
+    "url": "https://city.example/press/2026-09-10-safety",
+    "source": "○○시청 보도자료(가상)"
+  },
+  "docScore": 42.0,
+  "copiedSentenceRatio": 50.0,
+  "sentences": [
+    {
+      "i": 0,
+      "text": "2026 여수세계섬박람회 조직위원회는 해상 관람객 안전관리 종합대책을 수립했다고 밝혔다.",
+      "best_pr": 0,
+      "pr_text": "2026 여수세계섬박람회 조직위원회는 해상 관람객 안전관리 종합대책을 수립했다고 밝혔다.",
+      "sim": 1.0,
+      "copied": true
+    },
+    {
+      "i": 1,
+      "text": "조직위는 박람회 기간 중 운항하는 여객선 18척에 대해 사전 안전점검을 실시한다.",
+      "best_pr": 1,
+      "pr_text": "조직위는 박람회 기간 중 운항하는 여객선 18척에 대해 사전 안전점검을 실시한다.",
+      "sim": 1.0,
+      "copied": true
+    }
+  ],
+  "omittedSentences": 2,
+  "excerptOnly": true
+}

@@ -29,7 +29,7 @@ from db import connect  # noqa: E402
 from nlp import clean_text  # noqa: E402
 
 KST = timezone(timedelta(hours=9), "KST")
-USER_AGENT = "MediaWatchBot/0.1 (media fairness research; +contact in repo README)"
+USER_AGENT = "ParallaxBot/0.1 (media fairness research; +contact in repo README)"
 MIN_BODY_CHARS = 200
 PER_DOMAIN_DELAY = 1.5
 

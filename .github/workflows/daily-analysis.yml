@@ -2,6 +2,9 @@ name: 일일 보도 분석
 
 # KST 06:00 = UTC 21:00 (전날). 이 시각에 돌면 대상은 "어제(KST)" 하루치입니다.
 # 파이프라인은 datetime.now(KST) 로 날짜를 계산하므로 러너 타임존(UTC)과 무관합니다.
+#
+# 주의: GitHub 의 schedule 트리거는 **기본 브랜치에 있는 워크플로만** 실행합니다.
+# 이 파일이 기본 브랜치에 없으면 수동 실행(workflow_dispatch)만 동작합니다.
 on:
   schedule:
     - cron: "0 21 * * *"

@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "mediawatch.db"
+DB_PATH = Path(__file__).resolve().parent.parent / "data" / "parallax.db"
 
 SCHEMA = """
 PRAGMA journal_mode=WAL;

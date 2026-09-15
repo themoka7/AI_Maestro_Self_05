@@ -1,0 +1,46 @@
+{
+  "articleId": "14d6b55ae277aa39",
+  "pressRelease": {
+    "title": "박람회장 주변 교통통제 및 셔틀버스 운행 안내",
+    "url": "https://city.example/press/2026-09-10-schedule",
+    "source": "○○시청 보도자료(가상)"
+  },
+  "docScore": 89.4,
+  "copiedSentenceRatio": 80.0,
+  "sentences": [
+    {
+      "i": 1,
+      "text": "여수시가 박람회 기간 중 박람회장 주변 도로의 교통을 통제한다고 안내했다.",
+      "best_pr": 0,
+      "pr_text": "여수시는 박람회 기간 중 박람회장 주변 도로의 교통을 통제한다고 안내했다.",
+      "sim": 1.0,
+      "copied": true
+    },
+    {
+      "i": 2,
+      "text": "통제 구간은 박람회장 진입로 2.4킬로미터 구간이며 통제 시간은 오전 8시부터 오후 10시까지다.",
+      "best_pr": 1,
+      "pr_text": "통제 구간은 박람회장 진입로 2.4킬로미터 구간이며 통제 시간은 오전 8시부터 오후 10시까지다.",
+      "sim": 1.0,
+      "copied": true
+    },
+    {
+      "i": 3,
+      "text": "셔틀버스는 여수엑스포역과 여수종합버스터미널에서 15분 간격으로 운행한다.",
+      "best_pr": 2,
+      "pr_text": "셔틀버스는 여수엑스포역과 여수종합버스터미널에서 15분 간격으로 운행한다.",
+      "sim": 1.0,
+      "copied": true
+    },
+    {
+      "i": 4,
+      "text": "자가용 이용 관람객은 임시 주차장 4곳을 이용할 수 있다.",
+      "best_pr": 3,
+      "pr_text": "자가용 이용 관람객은 임시 주차장 4곳을 이용할 수 있다.",
+      "sim": 1.0,
+      "copied": true
+    }
+  ],
+  "omittedSentences": 1,
+  "excerptOnly": true
+}

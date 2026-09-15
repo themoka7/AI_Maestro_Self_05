@@ -1,0 +1,502 @@
+{
+  "event": {
+    "id": "yeosu-island-expo-2026",
+    "name": "2026 여수세계섬박람회",
+    "description": "공식 보도자료를 기준점으로, 각 언론사 보도가 그로부터 얼마나 떨어져 있는지 측정"
+  },
+  "window": {
+    "from": "2026-09-10",
+    "to": "2026-09-14",
+    "days": 5
+  },
+  "generatedAt": "2026-09-15T17:49:28.312001+09:00",
+  "params": {
+    "duplication_threshold": 0.7,
+    "prior_weight": 10.0,
+    "min_articles": 5
+  },
+  "demo": true,
+  "totals": {
+    "articles": 105,
+    "watchdog_rate": 23.8,
+    "cheerleader_rate": 47.6,
+    "neutral_rate": 28.6,
+    "duplication_rate": 47.6
+  },
+  "daily": [
+    {
+      "date": "2026-09-10",
+      "articles": 21,
+      "watchdog_rate": 23.8,
+      "cheerleader_rate": 47.6,
+      "neutral_rate": 28.6,
+      "duplication_rate": 47.6
+    },
+    {
+      "date": "2026-09-11",
+      "articles": 21,
+      "watchdog_rate": 23.8,
+      "cheerleader_rate": 47.6,
+      "neutral_rate": 28.6,
+      "duplication_rate": 47.6
+    },
+    {
+      "date": "2026-09-12",
+      "articles": 21,
+      "watchdog_rate": 23.8,
+      "cheerleader_rate": 47.6,
+      "neutral_rate": 28.6,
+      "duplication_rate": 47.6
+    },
+    {
+      "date": "2026-09-13",
+      "articles": 21,
+      "watchdog_rate": 23.8,
+      "cheerleader_rate": 47.6,
+      "neutral_rate": 28.6,
+      "duplication_rate": 47.6
+    },
+    {
+      "date": "2026-09-14",
+      "articles": 21,
+      "watchdog_rate": 23.8,
+      "cheerleader_rate": 47.6,
+      "neutral_rate": 28.6,
+      "duplication_rate": 47.6
+    }
+  ],
+  "outlets": [
+    {
+      "outlet": "물결신문",
+      "articles": 10,
+      "activeDays": 5,
+      "watchdog": 10,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": 100.0,
+      "cheerleader_rate": 0.0,
+      "neutral_rate": 0.0,
+      "duplication_rate": 0.0,
+      "autonomy_score": 73.6,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 56.0
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 56.0
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 56.0
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 56.0
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 56.0
+        }
+      ],
+      "rank": 1
+    },
+    {
+      "outlet": "나루탐사",
+      "articles": 5,
+      "activeDays": 5,
+      "watchdog": 5,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": 100.0,
+      "cheerleader_rate": 0.0,
+      "neutral_rate": 0.0,
+      "duplication_rate": 0.0,
+      "autonomy_score": 64.8,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 52.0
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 52.0
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 52.0
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 52.0
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 100.0,
+          "autonomy_score": 52.0
+        }
+      ],
+      "rank": 2
+    },
+    {
+      "outlet": "노을방송",
+      "articles": 10,
+      "activeDays": 5,
+      "watchdog": 0,
+      "cheerleader": 5,
+      "neutral": 5,
+      "duplicated": 0,
+      "watchdog_rate": 0.0,
+      "cheerleader_rate": 50.0,
+      "neutral_rate": 50.0,
+      "duplication_rate": 0.0,
+      "autonomy_score": 55.4,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 49.9
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 49.9
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 49.9
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 49.9
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 49.9
+        }
+      ],
+      "rank": 3
+    },
+    {
+      "outlet": "하늘일보",
+      "articles": 15,
+      "activeDays": 5,
+      "watchdog": 5,
+      "cheerleader": 5,
+      "neutral": 5,
+      "duplicated": 5,
+      "watchdog_rate": 33.3,
+      "cheerleader_rate": 33.3,
+      "neutral_rate": 33.3,
+      "duplication_rate": 33.3,
+      "autonomy_score": 55.2,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 3,
+          "duplication_rate": 33.3,
+          "watchdog_rate": 33.3,
+          "autonomy_score": 50.3
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 3,
+          "duplication_rate": 33.3,
+          "watchdog_rate": 33.3,
+          "autonomy_score": 50.3
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 3,
+          "duplication_rate": 33.3,
+          "watchdog_rate": 33.3,
+          "autonomy_score": 50.3
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 3,
+          "duplication_rate": 33.3,
+          "watchdog_rate": 33.3,
+          "autonomy_score": 50.3
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 3,
+          "duplication_rate": 33.3,
+          "watchdog_rate": 33.3,
+          "autonomy_score": 50.3
+        }
+      ],
+      "rank": 4
+    },
+    {
+      "outlet": "갯벌뉴스",
+      "articles": 25,
+      "activeDays": 5,
+      "watchdog": 5,
+      "cheerleader": 10,
+      "neutral": 10,
+      "duplicated": 10,
+      "watchdog_rate": 20.0,
+      "cheerleader_rate": 40.0,
+      "neutral_rate": 40.0,
+      "duplication_rate": 40.0,
+      "autonomy_score": 51.1,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 5,
+          "duplication_rate": 40.0,
+          "watchdog_rate": 20.0,
+          "autonomy_score": 49.0
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 5,
+          "duplication_rate": 40.0,
+          "watchdog_rate": 20.0,
+          "autonomy_score": 49.0
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 5,
+          "duplication_rate": 40.0,
+          "watchdog_rate": 20.0,
+          "autonomy_score": 49.0
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 5,
+          "duplication_rate": 40.0,
+          "watchdog_rate": 20.0,
+          "autonomy_score": 49.0
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 5,
+          "duplication_rate": 40.0,
+          "watchdog_rate": 20.0,
+          "autonomy_score": 49.0
+        }
+      ],
+      "rank": 5
+    },
+    {
+      "outlet": "가온통신",
+      "articles": 15,
+      "activeDays": 5,
+      "watchdog": 0,
+      "cheerleader": 10,
+      "neutral": 5,
+      "duplicated": 10,
+      "watchdog_rate": 0.0,
+      "cheerleader_rate": 66.7,
+      "neutral_rate": 33.3,
+      "duplication_rate": 66.7,
+      "autonomy_score": 35.2,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 3,
+          "duplication_rate": 66.7,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 42.6
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 3,
+          "duplication_rate": 66.7,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 42.6
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 3,
+          "duplication_rate": 66.7,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 42.6
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 3,
+          "duplication_rate": 66.7,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 42.6
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 3,
+          "duplication_rate": 66.7,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 42.6
+        }
+      ],
+      "rank": 6
+    },
+    {
+      "outlet": "등대일보",
+      "articles": 15,
+      "activeDays": 5,
+      "watchdog": 0,
+      "cheerleader": 10,
+      "neutral": 5,
+      "duplicated": 15,
+      "watchdog_rate": 0.0,
+      "cheerleader_rate": 66.7,
+      "neutral_rate": 33.3,
+      "duplication_rate": 100.0,
+      "autonomy_score": 26.1,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 3,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.1
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 3,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.1
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 3,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.1
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 3,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.1
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 3,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.1
+        }
+      ],
+      "rank": 7
+    },
+    {
+      "outlet": "바다신문",
+      "articles": 10,
+      "activeDays": 5,
+      "watchdog": 0,
+      "cheerleader": 10,
+      "neutral": 0,
+      "duplicated": 10,
+      "watchdog_rate": 0.0,
+      "cheerleader_rate": 100.0,
+      "neutral_rate": 0.0,
+      "duplication_rate": 100.0,
+      "autonomy_score": 23.6,
+      "sufficient_sample": true,
+      "trend": null,
+      "series": [
+        {
+          "date": "2026-09-10",
+          "articles": 2,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.3
+        },
+        {
+          "date": "2026-09-11",
+          "articles": 2,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.3
+        },
+        {
+          "date": "2026-09-12",
+          "articles": 2,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.3
+        },
+        {
+          "date": "2026-09-13",
+          "articles": 2,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.3
+        },
+        {
+          "date": "2026-09-14",
+          "articles": 2,
+          "duplication_rate": 100.0,
+          "watchdog_rate": 0.0,
+          "autonomy_score": 39.3
+        }
+      ],
+      "rank": 8
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { ArticleInspector } from "@/components/ArticleInspector";
 import { DailyTrend } from "@/components/DailyTrend";
+import { DemoBanner } from "@/components/DemoBanner";
 import { FramingDonut } from "@/components/FramingDonut";
 import { Methodology } from "@/components/Methodology";
 import { OutletTable } from "@/components/OutletTable";
@@ -50,15 +51,18 @@ export default async function DashboardPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+      {aggregate.demo && <DemoBanner />}
+
       <header>
         <p className="text-[12px] text-muted">
           {window.from} ~ {window.to} · {window.days}일 누적 · {event.name}
         </p>
         <h1 className="mt-1 text-[24px] font-semibold tracking-tight sm:text-[28px]">
-          보도 공정성 &amp; 보도자료 의존도 분석
+          Parallax <span className="text-ink-2">— 보도 시차 분석</span>
         </h1>
         <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-ink-2">
-          {event.description}
+          공식 보도자료를 기준점으로 두고, 각 언론사 보도가 그로부터 얼마나 떨어져 있는지
+          잽니다. 거리가 0 에 가까우면 그대로 옮긴 것이고, 멀수록 자체 취재를 거친 것입니다.
         </p>
       </header>
 

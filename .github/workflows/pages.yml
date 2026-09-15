@@ -3,7 +3,8 @@ name: GitHub Pages 배포
 # 데이터가 갱신되거나(일일 분석 커밋) 대시보드 코드가 바뀌면 다시 배포합니다.
 on:
   push:
-    branches: [main]
+    # 이 리포지토리의 기본 브랜치입니다. main 으로 이름을 바꾸면 여기도 바꾸세요.
+    branches: [claude/festive-babbage-i7atn7, main]
     paths:
       - "data/history/**"
       - "web/**"

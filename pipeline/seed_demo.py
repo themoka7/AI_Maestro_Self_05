@@ -55,16 +55,20 @@ PRESS_RELEASES = [
 ]
 
 # (언론사, 도메인, [기사유형...]) — 유형별로 매체 성향을 다르게 구성
+#
+# 매체명과 도메인은 전부 가상입니다. 이 데모 데이터는 GitHub Pages 로 공개되므로
+# 실존 언론사 이름을 쓰면 합성 수치가 그 매체의 실제 보도 행태처럼 읽힙니다.
+# .example 은 RFC 2606 이 예시용으로 영구 예약한 TLD 라 실제 사이트가 될 수 없습니다.
 OUTLETS = [
-    ("연합뉴스",   "yna.co.kr",       ["verbatim:budget", "verbatim:safety", "neutral:schedule"]),
-    ("전남일보",   "jnilbo.com",      ["verbatim:budget", "critical:budget", "neutral:schedule"]),
-    ("광주일보",   "kwangju.co.kr",   ["verbatim:budget", "verbatim:safety"]),
-    ("남도일보",   "namdonews.com",   ["verbatim:safety", "verbatim:schedule", "verbatim:budget"]),
-    ("한겨레",     "hani.co.kr",      ["critical:budget", "critical:safety"]),
-    ("뉴스타파",   "newstapa.org",    ["critical:budget"]),
-    ("여수신문",   "yeosunews.co.kr", ["verbatim:budget", "partial:safety", "neutral:schedule",
-                                        "critical:safety", "verbatim:schedule"]),
-    ("노컷뉴스",   "nocutnews.co.kr", ["partial:budget", "neutral:schedule"]),
+    ("가온통신", "gaon.example",    ["verbatim:budget", "verbatim:safety", "neutral:schedule"]),
+    ("하늘일보", "haneul.example",  ["verbatim:budget", "critical:budget", "neutral:schedule"]),
+    ("바다신문", "bada.example",    ["verbatim:budget", "verbatim:safety"]),
+    ("등대일보", "deungdae.example", ["verbatim:safety", "verbatim:schedule", "verbatim:budget"]),
+    ("물결신문", "mulgyeol.example", ["critical:budget", "critical:safety"]),
+    ("나루탐사", "naru.example",    ["critical:budget"]),
+    ("갯벌뉴스", "gaetbeol.example", ["verbatim:budget", "partial:safety", "neutral:schedule",
+                                      "critical:safety", "verbatim:schedule"]),
+    ("노을방송", "noeul.example",   ["partial:budget", "neutral:schedule"]),
 ]
 
 CRITICAL_BODIES = {
@@ -121,14 +125,14 @@ def seed(date: str, reset: bool) -> None:
     day = datetime.strptime(date, "%Y-%m-%d").replace(tzinfo=KST)
     pr_by_key = {}
     for i, pr in enumerate(PRESS_RELEASES):
-        url = f"https://www.yeosu.go.kr/www/govt/news/report/{date}-{pr['key']}"
+        url = f"https://city.example/press/{date}-{pr['key']}"
         pid = hashlib.sha1(url.encode()).hexdigest()[:16]
         pr_by_key[pr["key"]] = pid
         conn.execute(
             """INSERT OR REPLACE INTO press_releases
                (id, source_id, source_name, title, body, url, published_at, fetched_at)
                VALUES (?,?,?,?,?,?,?,?)""",
-            (pid, "yeosu-city", "여수시청 보도자료", pr["title"], pr["body"], url,
+            (pid, "demo-city", "○○시청 보도자료(가상)", pr["title"], pr["body"], url,
              (day - timedelta(days=1)).date().isoformat(), now),
         )
 

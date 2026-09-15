@@ -51,7 +51,7 @@ def record(conn, date: str, stage: str, started: str, ok: bool, err: str | None)
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="MediaWatch 파이프라인 실행")
+    ap = argparse.ArgumentParser(description="Parallax 파이프라인 실행")
     ap.add_argument("--date", default=None, help="기본: 어제 (KST)")
     ap.add_argument("--only", nargs="+", choices=STAGES, help="이 단계들만 실행")
     ap.add_argument("--skip", nargs="+", choices=STAGES, default=[], help="건너뛸 단계")
@@ -63,7 +63,7 @@ def main() -> int:
     stages = args.only or [s for s in STAGES if s not in args.skip]
 
     conn = connect()
-    print(f"═══ MediaWatch 파이프라인 | 대상일 {date} ═══")
+    print(f"═══ Parallax 파이프라인 | 대상일 {date} ═══")
     failures = []
     for stage in stages:
         started = datetime.now(KST).isoformat()

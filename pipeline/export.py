@@ -151,6 +151,15 @@ def main() -> int:
            WHERE target_date = ? GROUP BY body_status""",
         (args.date,),
     ).fetchall()
+    # 분류가 전부 목(mock)이면 합성 데이터입니다. 공개 화면에서 실측과 구분해야 하므로
+    # 사람이 지우는 것에 기대지 않고 산출물 자체에 표시합니다.
+    models = {r["model"] for r in conn.execute(
+        """SELECT DISTINCT c.model FROM classifications c
+           JOIN articles a ON a.id = c.article_id WHERE a.target_date = ?""",
+        (args.date,),
+    )}
+    is_demo = bool(models) and models == {"mock"}
+
     golden = conn.execute(
         """SELECT COUNT(*) c FROM golden_labels g JOIN articles a ON a.id = g.article_id
            WHERE a.target_date = ?""",
@@ -169,6 +178,7 @@ def main() -> int:
         "coverage": {r["body_status"]: r["c"] for r in coverage},
         "goldenLabeled": golden,
         "excerptOnly": not args.full_text,
+        "demo": is_demo,
     }
 
     out = Path(args.out)
@@ -199,7 +209,9 @@ def main() -> int:
     print(f"  보유 날짜 {len(dates)}일")
     print(f"  details/{args.date}/*.json  {n_detail}건"
           + ("  [매칭 문장만]" if not args.full_text else "  [전문 포함 — 공개 배포 금지]"))
-    if golden == 0:
+    if is_demo:
+        print("  ℹ 합성 데모 데이터 (model=mock) — 산출물에 demo=true 로 표시됨")
+    elif golden == 0:
         print("  ⚠ 검증 라벨 0건 — evaluate.py 로 검증 전에는 대외 공개 금지")
     conn.close()
     return 0

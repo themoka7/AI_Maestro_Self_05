@@ -73,6 +73,7 @@ export interface OutletAggregate {
   window: { from: string; to: string; days: number };
   generatedAt: string;
   params: { duplication_threshold: number; prior_weight: number; min_articles: number };
+  demo?: boolean;
   totals: Totals;
   daily: (Totals & { date: string })[];
   outlets: OutletCumulative[];
@@ -94,6 +95,8 @@ export interface Summary {
   coverage: Record<string, number>;
   goldenLabeled: number;
   excerptOnly: boolean;
+  /** 합성 데모 데이터 여부 (분류가 전부 mock). 공개 화면에서 실측과 구분합니다. */
+  demo?: boolean;
 }
 
 export interface SentenceMatch {

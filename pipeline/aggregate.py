@@ -134,6 +134,8 @@ def main() -> int:
         "window": {"from": dates[0], "to": dates[-1], "days": len(dates)},
         "generatedAt": datetime.now(KST).isoformat(),
         "params": dailies[-1]["params"],
+        # 한 날이라도 실측이 섞여 있으면 데모가 아닙니다. 보수적으로 판단합니다.
+        "demo": all(d.get("demo") for d in dailies),
         "totals": {
             "articles": total,
             "watchdog_rate": round(g_w * 100, 1),
