@@ -28,7 +28,9 @@ from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect  # noqa: E402
-from naver_api import NaverApiError, NaverAuthError, NaverSearchClient  # noqa: E402
+from naver_api import (  # noqa: E402
+    NaverApiError, NaverAuthError, NaverSearchClient, QuotaExceeded,
+)
 from nlp import clean_text  # noqa: E402
 from sources.outlets import resolve as resolve_outlet  # noqa: E402
 
@@ -77,40 +79,45 @@ def collect_query(client: NaverSearchClient, query: str, target_date: str) -> li
     day_end = day_start + timedelta(days=1)
 
     found: list[dict] = []
-    for items in client.paginate_news(query):
-        passed_window = False
-        for item in items:
-            raw = item.get("originallink") or item.get("link") or ""
-            if not raw:
-                continue
-            try:
-                published = parsedate_to_datetime(item["pubDate"]).astimezone(KST)
-            except (KeyError, TypeError, ValueError):
-                continue
+    try:
+        pages = client.paginate_news(query)
+        for items in pages:
+            passed_window = False
+            for item in items:
+                raw = item.get("originallink") or item.get("link") or ""
+                if not raw:
+                    continue
+                try:
+                    published = parsedate_to_datetime(item["pubDate"]).astimezone(KST)
+                except (KeyError, TypeError, ValueError):
+                    continue
 
-            if published >= day_end:
-                continue                      # 아직 대상 날짜보다 미래 (최신순이라 앞부분)
-            if published < day_start:
-                passed_window = True          # 대상 날짜를 지나 과거로 넘어감
+                if published >= day_end:
+                    continue                  # 아직 대상 날짜보다 미래 (최신순이라 앞부분)
+                if published < day_start:
+                    passed_window = True      # 대상 날짜를 지나 과거로 넘어감
+                    break
+
+                outlet, domain, resolved = resolve_outlet(raw)
+                found.append({
+                    "id": article_id(raw),
+                    "title": clean_text(item.get("title")),
+                    "description": clean_text(item.get("description")),
+                    "url": normalize_url(raw),
+                    "naver_url": item.get("link") or None,
+                    "outlet": outlet,
+                    "outlet_domain": domain,
+                    "outlet_resolved": resolved,
+                    "published_at": published.isoformat(),
+                    "target_date": target_date,
+                    "query": query,
+                })
+
+            if passed_window:
                 break
-
-            outlet, domain, resolved = resolve_outlet(raw)
-            found.append({
-                "id": article_id(raw),
-                "title": clean_text(item.get("title")),
-                "description": clean_text(item.get("description")),
-                "url": normalize_url(raw),
-                "naver_url": item.get("link") or None,
-                "outlet": outlet,
-                "outlet_domain": domain,
-                "outlet_resolved": resolved,
-                "published_at": published.isoformat(),
-                "target_date": target_date,
-                "query": query,
-            })
-
-        if passed_window:
-            break
+    except QuotaExceeded as e:
+        # 예산이 끊겨도 여기까지 모은 것은 살립니다. 다음 실행이 이어받습니다.
+        print(f"  [{query}] 호출 예산 소진으로 중단: {e}", file=sys.stderr)
     return found
 
 
@@ -149,21 +156,37 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="NAVER API HUB 로 하루치 기사 수집")
     ap.add_argument("--date", default=None, help="대상 날짜 YYYY-MM-DD (기본: 어제, KST)")
     ap.add_argument("--config", default="config/event.yaml")
+    ap.add_argument("--max-calls", type=int, default=0,
+                    help="이번 실행의 호출 상한 (설정값보다 낮출 때만 적용)")
     args = ap.parse_args()
 
     cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
     target_date = args.date or yesterday_kst()
 
+    api_cfg = dict(cfg.get("api") or {})
+    if args.max_calls:
+        api_cfg["per_run_call_limit"] = min(
+            args.max_calls, int(api_cfg.get("per_run_call_limit", 500))
+        )
+
     try:
-        client = NaverSearchClient(cfg.get("api"))
+        client = NaverSearchClient(api_cfg)
         client.verify()
     except (NaverAuthError, NaverApiError) as e:
         print(f"검색 API 를 사용할 수 없습니다.\n{e}", file=sys.stderr)
         return 2
 
+    print(f"  예산: 오늘 {client.budget.used_today}/{client.budget.daily_limit}건 사용, "
+          f"잔여 {client.budget.remaining_today}건")
+
     conn = connect()
     total_new = total_merged = 0
+    quota_hit = False
     for query in cfg["queries"]:
+        if client.budget.remaining_today <= 0:
+            print(f"  [{query}] 일일 호출 예산 소진 — 건너뜀", file=sys.stderr)
+            quota_hit = True
+            continue
         try:
             rows = collect_query(client, query, target_date)
         except (NaverAuthError, NaverApiError) as e:
@@ -181,6 +204,10 @@ def main() -> int:
         (target_date,),
     ).fetchall()
     print(f"\n{target_date}: 신규 {total_new}건, 중복 병합 {total_merged}건")
+    print(client.budget.summary())
+    if quota_hit:
+        print("일부 검색어가 예산 소진으로 누락되었습니다. "
+              "이 날짜의 수집 결과는 불완전합니다.", file=sys.stderr)
     if unresolved:
         print("언론사 매핑 누락 도메인 (config/outlets_override.csv 에 추가 권장):")
         for row in unresolved:

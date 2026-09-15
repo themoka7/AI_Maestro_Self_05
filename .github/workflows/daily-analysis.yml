@@ -57,11 +57,15 @@ jobs:
       - name: 보도자료 수집
         run: python pipeline/collect_pr.py || echo "보도자료 소스가 비활성 상태입니다"
 
+      # 호출 예산(일 25,000건)은 data/history/usage.json 에 KST 날짜 기준으로 누적되고
+      # 매 실행 끝에 커밋됩니다. 러너가 초기화돼도 누계가 이어지는 유일한 기록입니다.
       - name: 기사 수집
         env:
           NCP_API_KEY_ID: ${{ secrets.NCP_API_KEY_ID }}
           NCP_API_KEY: ${{ secrets.NCP_API_KEY }}
-        run: python pipeline/collect_news.py --date "${{ steps.target.outputs.date }}"
+        run: |
+          python pipeline/collect_news.py --date "${{ steps.target.outputs.date }}" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: 본문 추출
         run: python pipeline/extract_body.py --date "${{ steps.target.outputs.date }}"

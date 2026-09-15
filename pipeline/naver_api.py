@@ -15,16 +15,27 @@
 """
 from __future__ import annotations
 
+import json
 import os
 import time
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any, Iterator
 
 import requests
+
+KST = timezone(timedelta(hours=9), "KST")
+# 호출 집계는 data/history 에 남깁니다. Actions 러너는 매번 초기화되므로
+# 리포지토리에 커밋되는 이 파일만이 날짜를 가로지르는 유일한 기록입니다.
+USAGE_FILE = Path(__file__).resolve().parents[1] / "data" / "history" / "usage.json"
+USAGE_KEEP_DAYS = 90
 
 DEFAULT_BASE_URL = "https://naverapihub.apigw.ntruss.com"
 DEFAULT_NEWS_PATH = "/search/v1/news"
 DEFAULT_MAX_START = 1000   # 구 API 기준. 실제 한도가 낮으면 아래에서 자동으로 멈춥니다.
 DEFAULT_DISPLAY = 100
+DEFAULT_DAILY_LIMIT = 25000
+DEFAULT_PER_RUN_LIMIT = 500
 
 CREDENTIAL_HELP = """
 NAVER API HUB 자격증명을 확인하세요.
@@ -38,6 +49,85 @@ NAVER API HUB 자격증명을 확인하세요.
 
   ※ 검색 API 는 2026년 개발자센터에서 NAVER API HUB 로 이관되었고, NCP 종량 과금입니다.
 """
+
+
+class QuotaExceeded(RuntimeError):
+    """호출 예산 초과. 남은 작업을 포기하더라도 더 부르지 않습니다."""
+
+
+class CallBudget:
+    """일일·실행당 호출 상한.
+
+    NCP 는 종량 과금이라 폭주가 곧 비용입니다. 정상 동작이라면 하루 수십 건이면
+    충분한데(쿼리 5개 x 페이지 10 = 50), 페이징 버그나 재시도 폭주 한 번이면
+    순식간에 수천 건이 나갈 수 있습니다. 그래서 두 겹으로 막습니다.
+
+      per_run  실행 1회가 쓸 수 있는 최대치 — 폭주를 그 자리에서 끊습니다
+      daily    하루 누계 상한 — 수동 재실행을 반복해도 넘지 않습니다
+
+    집계는 KST 날짜 기준입니다. 소비 직후 즉시 파일에 반영해, 중간에 죽어도
+    이미 나간 호출이 장부에서 누락되지 않게 합니다.
+    """
+
+    def __init__(self, daily_limit: int = DEFAULT_DAILY_LIMIT,
+                 per_run_limit: int = DEFAULT_PER_RUN_LIMIT,
+                 path: Path = USAGE_FILE) -> None:
+        self.daily_limit = int(daily_limit)
+        self.per_run_limit = int(per_run_limit)
+        self.path = Path(path)
+        self.today = datetime.now(KST).strftime("%Y-%m-%d")
+        self.run_used = 0
+        self._data = self._load()
+
+    def _load(self) -> dict:
+        try:
+            data = json.loads(self.path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {"days": {}}
+        if not isinstance(data.get("days"), dict):
+            return {"days": {}}
+        return data
+
+    def _save(self) -> None:
+        days = self._data["days"]
+        # 오래된 날짜는 버립니다. 이 파일은 매일 커밋되므로 무한정 키우지 않습니다.
+        for key in sorted(days)[:-USAGE_KEEP_DAYS]:
+            days.pop(key, None)
+        self._data["updatedAt"] = datetime.now(KST).isoformat()
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.write_text(json.dumps(self._data, ensure_ascii=False, indent=2),
+                             encoding="utf-8")
+
+    @property
+    def used_today(self) -> int:
+        return int(self._data["days"].get(self.today, 0))
+
+    @property
+    def remaining_today(self) -> int:
+        return max(0, self.daily_limit - self.used_today)
+
+    def consume(self, n: int = 1) -> None:
+        """호출 직전에 부릅니다. 상한을 넘기면 호출하지 않고 예외를 던집니다."""
+        if self.run_used + n > self.per_run_limit:
+            raise QuotaExceeded(
+                f"실행당 호출 상한 초과: {self.run_used}/{self.per_run_limit}건. "
+                f"페이징이 예상보다 길어졌거나 쿼리가 너무 많습니다. "
+                f"config/event.yaml 의 api.per_run_call_limit 을 확인하세요."
+            )
+        if self.used_today + n > self.daily_limit:
+            raise QuotaExceeded(
+                f"일일 호출 상한 초과: {self.used_today}/{self.daily_limit}건 "
+                f"({self.today}, KST 기준). 자정까지 기다리거나 "
+                f"config/event.yaml 의 api.daily_call_limit 을 조정하세요."
+            )
+        self.run_used += n
+        self._data["days"][self.today] = self.used_today + n
+        self._save()
+
+    def summary(self) -> str:
+        return (f"호출 {self.run_used}건 사용 (이번 실행) · "
+                f"오늘 누계 {self.used_today}/{self.daily_limit}건 · "
+                f"잔여 {self.remaining_today}건")
 
 
 class NaverAuthError(RuntimeError):
@@ -75,6 +165,10 @@ class NaverSearchClient:
         self.max_start = int(cfg.get("max_start", DEFAULT_MAX_START))
         self.display = int(cfg.get("display", DEFAULT_DISPLAY))
         self.delay = float(cfg.get("request_delay", 0.1))
+        self.budget = CallBudget(
+            daily_limit=cfg.get("daily_call_limit", DEFAULT_DAILY_LIMIT),
+            per_run_limit=cfg.get("per_run_call_limit", DEFAULT_PER_RUN_LIMIT),
+        )
 
         key_id, key = credentials()
         self.session = requests.Session()
@@ -89,6 +183,8 @@ class NaverSearchClient:
         return f"{self.base_url}{self.news_path}"
 
     def _get(self, params: dict) -> requests.Response:
+        # 예산 확인이 먼저입니다. 초과하면 요청 자체를 보내지 않습니다.
+        self.budget.consume(1)
         return self.session.get(self.news_url, params=params, timeout=15)
 
     def verify(self) -> None:
