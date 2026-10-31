@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-10-30",
-    "days": 51
+    "to": "2026-10-31",
+    "days": 52
   },
-  "generatedAt": "2026-10-31T09:32:40.934757+09:00",
+  "generatedAt": "2026-11-01T08:58:44.439432+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 2757,
+    "articles": 2763,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -429,6 +429,14 @@
     {
       "date": "2026-10-30",
       "articles": 64,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-10-31",
+      "articles": 6,
       "watchdog_rate": null,
       "cheerleader_rate": null,
       "neutral_rate": null,
@@ -878,9 +886,9 @@
     },
     {
       "outlet": "netongs.com",
-      "articles": 203,
+      "articles": 205,
       "classified": 0,
-      "activeDays": 42,
+      "activeDays": 43,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -1183,6 +1191,13 @@
         {
           "date": "2026-10-30",
           "articles": 4,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-10-31",
+          "articles": 2,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -7232,9 +7247,9 @@
     },
     {
       "outlet": "newsfreezone.co.kr",
-      "articles": 16,
+      "articles": 17,
       "classified": 0,
-      "activeDays": 14,
+      "activeDays": 15,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -7341,6 +7356,13 @@
         {
           "date": "2026-10-29",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-10-31",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -10151,9 +10173,9 @@
     },
     {
       "outlet": "mhns.co.kr",
-      "articles": 29,
+      "articles": 30,
       "classified": 0,
-      "activeDays": 21,
+      "activeDays": 22,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -10309,6 +10331,13 @@
         {
           "date": "2026-10-30",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-10-31",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -12663,9 +12692,9 @@
     },
     {
       "outlet": "ajunews.com",
-      "articles": 43,
+      "articles": 45,
       "classified": 0,
-      "activeDays": 32,
+      "activeDays": 33,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -12898,6 +12927,13 @@
         {
           "date": "2026-10-30",
           "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-10-31",
+          "articles": 2,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
