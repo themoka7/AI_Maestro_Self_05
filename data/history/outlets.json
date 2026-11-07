@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-11-05",
-    "days": 57
+    "to": "2026-11-06",
+    "days": 58
   },
-  "generatedAt": "2026-11-06T10:27:55.936369+09:00",
+  "generatedAt": "2026-11-07T09:41:37.100807+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 2984,
+    "articles": 3014,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -481,6 +481,14 @@
       "cheerleader_rate": null,
       "neutral_rate": null,
       "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-11-06",
+      "articles": 30,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
     }
   ],
   "outlets": [
@@ -926,9 +934,9 @@
     },
     {
       "outlet": "netongs.com",
-      "articles": 220,
+      "articles": 223,
       "classified": 0,
-      "activeDays": 48,
+      "activeDays": 49,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -1276,15 +1284,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 3,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 9
     },
     {
       "outlet": "전남일보",
-      "articles": 90,
+      "articles": 91,
       "classified": 0,
-      "activeDays": 42,
+      "activeDays": 43,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -1586,6 +1601,13 @@
         },
         {
           "date": "2026-11-04",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -1943,9 +1965,9 @@
     },
     {
       "outlet": "breaknews.com",
-      "articles": 94,
+      "articles": 96,
       "classified": 0,
-      "activeDays": 38,
+      "activeDays": 39,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -2220,6 +2242,13 @@
         {
           "date": "2026-11-05",
           "articles": 3,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 2,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -2901,9 +2930,9 @@
     },
     {
       "outlet": "newstnt.com",
-      "articles": 10,
+      "articles": 11,
       "classified": 0,
-      "activeDays": 8,
+      "activeDays": 9,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -2971,15 +3000,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 22
     },
     {
       "outlet": "newsworker.co.kr",
-      "articles": 104,
+      "articles": 106,
       "classified": 0,
-      "activeDays": 45,
+      "activeDays": 46,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -3306,15 +3342,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 23
     },
     {
       "outlet": "polinews.co.kr",
-      "articles": 22,
+      "articles": 24,
       "classified": 0,
-      "activeDays": 18,
+      "activeDays": 19,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -3449,6 +3492,13 @@
         {
           "date": "2026-11-03",
           "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 2,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -4062,9 +4112,9 @@
     },
     {
       "outlet": "tournews21.com",
-      "articles": 10,
+      "articles": 12,
       "classified": 0,
-      "activeDays": 8,
+      "activeDays": 9,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -4129,6 +4179,13 @@
         {
           "date": "2026-11-02",
           "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 2,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -4807,9 +4864,9 @@
     },
     {
       "outlet": "뉴시스",
-      "articles": 122,
+      "articles": 123,
       "classified": 0,
-      "activeDays": 41,
+      "activeDays": 42,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -5104,6 +5161,13 @@
         },
         {
           "date": "2026-11-05",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -6297,9 +6361,9 @@
     },
     {
       "outlet": "전남매일신문",
-      "articles": 25,
+      "articles": 26,
       "classified": 0,
-      "activeDays": 18,
+      "activeDays": 19,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -6433,6 +6497,13 @@
         },
         {
           "date": "2026-11-05",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -7138,9 +7209,9 @@
     },
     {
       "outlet": "enewstoday.co.kr",
-      "articles": 13,
+      "articles": 14,
       "classified": 0,
-      "activeDays": 8,
+      "activeDays": 9,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -7204,6 +7275,13 @@
         },
         {
           "date": "2026-11-04",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -8290,9 +8368,9 @@
     },
     {
       "outlet": "viva100.com",
-      "articles": 15,
+      "articles": 16,
       "classified": 0,
-      "activeDays": 14,
+      "activeDays": 15,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -8398,6 +8476,13 @@
         },
         {
           "date": "2026-10-30",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -8775,9 +8860,9 @@
     },
     {
       "outlet": "여수MBC",
-      "articles": 97,
+      "articles": 98,
       "classified": 0,
-      "activeDays": 39,
+      "activeDays": 40,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -9059,6 +9144,13 @@
         {
           "date": "2026-11-05",
           "articles": 3,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -10032,9 +10124,9 @@
     },
     {
       "outlet": "aflnews.co.kr",
-      "articles": 7,
+      "articles": 8,
       "classified": 0,
-      "activeDays": 6,
+      "activeDays": 7,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -10084,6 +10176,13 @@
         },
         {
           "date": "2026-10-19",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -10545,9 +10644,9 @@
     },
     {
       "outlet": "kjmbc.co.kr",
-      "articles": 15,
+      "articles": 16,
       "classified": 0,
-      "activeDays": 11,
+      "activeDays": 12,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -10636,6 +10735,13 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 78
@@ -10718,9 +10824,9 @@
     },
     {
       "outlet": "m-i.kr",
-      "articles": 38,
+      "articles": 39,
       "classified": 0,
-      "activeDays": 19,
+      "activeDays": 20,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -10861,6 +10967,13 @@
         },
         {
           "date": "2026-11-05",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -11399,9 +11512,9 @@
     },
     {
       "outlet": "newskr.kr",
-      "articles": 15,
+      "articles": 16,
       "classified": 0,
-      "activeDays": 12,
+      "activeDays": 13,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -11497,15 +11610,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 85
     },
     {
       "outlet": "newspim.com",
-      "articles": 14,
+      "articles": 15,
       "classified": 0,
-      "activeDays": 11,
+      "activeDays": 12,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -11590,6 +11710,13 @@
         },
         {
           "date": "2026-10-30",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -11717,9 +11844,9 @@
     },
     {
       "outlet": "safetimes.co.kr",
-      "articles": 13,
+      "articles": 14,
       "classified": 0,
-      "activeDays": 12,
+      "activeDays": 13,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -11811,6 +11938,13 @@
         },
         {
           "date": "2026-11-05",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -12180,9 +12314,9 @@
     },
     {
       "outlet": "광주드림",
-      "articles": 26,
+      "articles": 27,
       "classified": 0,
-      "activeDays": 16,
+      "activeDays": 17,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -12306,15 +12440,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 95
     },
     {
       "outlet": "서울경제",
-      "articles": 16,
+      "articles": 17,
       "classified": 0,
-      "activeDays": 14,
+      "activeDays": 15,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -12420,6 +12561,13 @@
         },
         {
           "date": "2026-11-05",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -12915,9 +13063,9 @@
     },
     {
       "outlet": "thefairnews.co.kr",
-      "articles": 21,
+      "articles": 22,
       "classified": 0,
-      "activeDays": 20,
+      "activeDays": 21,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -13065,6 +13213,13 @@
         },
         {
           "date": "2026-11-01",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -14099,9 +14254,9 @@
     },
     {
       "outlet": "busan.com",
-      "articles": 13,
+      "articles": 14,
       "classified": 0,
-      "activeDays": 12,
+      "activeDays": 13,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -14193,6 +14348,13 @@
         },
         {
           "date": "2026-11-04",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -14520,9 +14682,9 @@
     },
     {
       "outlet": "cbci.co.kr",
-      "articles": 7,
+      "articles": 8,
       "classified": 0,
-      "activeDays": 6,
+      "activeDays": 7,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -14573,6 +14735,13 @@
         {
           "date": "2026-11-05",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -14637,9 +14806,9 @@
     },
     {
       "outlet": "뉴스1",
-      "articles": 8,
+      "articles": 9,
       "classified": 0,
-      "activeDays": 3,
+      "activeDays": 4,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -14668,6 +14837,13 @@
         },
         {
           "date": "2026-11-04",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-06",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
