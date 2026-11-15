@@ -1,0 +1,74 @@
+{
+  "event": {
+    "id": "yeosu-island-expo-2026",
+    "name": "2026 여수세계섬박람회",
+    "description": "공식 보도자료를 기준점으로, 각 언론사 보도가 그로부터 얼마나 떨어져 있는지 측정"
+  },
+  "date": "2026-11-14",
+  "generatedAt": "2026-11-15T00:52:28.583070+00:00",
+  "totals": {
+    "articles": 1,
+    "watchdog_rate": null,
+    "cheerleader_rate": null,
+    "neutral_rate": null,
+    "duplication_rate": 0.0
+  },
+  "totalsUniqueOnly": {
+    "articles": 1,
+    "watchdog_rate": null,
+    "cheerleader_rate": null,
+    "neutral_rate": null,
+    "duplication_rate": 0.0
+  },
+  "params": {
+    "duplication_threshold": 0.7,
+    "prior_weight": 10.0,
+    "min_articles": 5
+  },
+  "outlets": [
+    {
+      "outlet": "조선일보",
+      "articles": 1,
+      "classified": 0,
+      "watchdog": 0,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0,
+      "autonomy_score": null,
+      "sufficient_sample": false,
+      "rank": null
+    }
+  ],
+  "articles": [
+    {
+      "id": "e2f259a86ddcb9c4",
+      "title": "섬박람회 막 내린 여수 , COP33 유치 노린다",
+      "url": "https://biz.chosun.com/topics/topics_social/2026/11/14/3A2OM6ZSV5EYBDT3H522K6NZDE",
+      "outlet": "조선일보",
+      "publishedAt": "2026-11-14T06:01:00+09:00",
+      "category": null,
+      "score": null,
+      "confidence": null,
+      "rationale": "",
+      "flaggedIssues": [],
+      "duplication": 0.0,
+      "isDuplicated": false,
+      "docScore": 0.0,
+      "copiedSentenceRatio": 0.0,
+      "isCanonical": true,
+      "syndicationSpread": 1,
+      "pressRelease": null
+    }
+  ],
+  "coverage": {
+    "failed": 1,
+    "ok": 1
+  },
+  "goldenLabeled": 0,
+  "excerptOnly": true,
+  "demo": false
+}

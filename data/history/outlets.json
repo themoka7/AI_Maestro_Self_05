@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-11-13",
-    "days": 65
+    "to": "2026-11-14",
+    "days": 66
   },
-  "generatedAt": "2026-11-14T10:20:19.551317+09:00",
+  "generatedAt": "2026-11-15T09:52:28.732755+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 3146,
+    "articles": 3147,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -541,6 +541,14 @@
     {
       "date": "2026-11-13",
       "articles": 11,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-11-14",
+      "articles": 1,
       "watchdog_rate": null,
       "cheerleader_rate": null,
       "neutral_rate": null,
@@ -13291,9 +13299,9 @@
     },
     {
       "outlet": "조선일보",
-      "articles": 7,
+      "articles": 8,
       "classified": 0,
-      "activeDays": 7,
+      "activeDays": 8,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -13350,6 +13358,13 @@
         },
         {
           "date": "2026-11-11",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-14",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
