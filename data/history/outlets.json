@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-11-15",
-    "days": 67
+    "to": "2026-11-16",
+    "days": 68
   },
-  "generatedAt": "2026-11-16T09:50:29.698079+09:00",
+  "generatedAt": "2026-11-17T12:27:41.224239+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 3153,
+    "articles": 3159,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -556,6 +556,14 @@
     },
     {
       "date": "2026-11-15",
+      "articles": 6,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-11-16",
       "articles": 6,
       "watchdog_rate": null,
       "cheerleader_rate": null,
@@ -7110,9 +7118,9 @@
     },
     {
       "outlet": "헤럴드경제",
-      "articles": 36,
+      "articles": 37,
       "classified": 0,
-      "activeDays": 26,
+      "activeDays": 27,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -7302,6 +7310,13 @@
         },
         {
           "date": "2026-11-13",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -12380,9 +12395,9 @@
     },
     {
       "outlet": "ngonews.kr",
-      "articles": 9,
+      "articles": 10,
       "classified": 0,
-      "activeDays": 7,
+      "activeDays": 8,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -12440,6 +12455,13 @@
         {
           "date": "2026-10-14",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -13335,9 +13357,9 @@
     },
     {
       "outlet": "조선일보",
-      "articles": 8,
+      "articles": 9,
       "classified": 0,
-      "activeDays": 8,
+      "activeDays": 9,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -13401,6 +13423,13 @@
         },
         {
           "date": "2026-11-14",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -13953,9 +13982,9 @@
     },
     {
       "outlet": "kookje.co.kr",
-      "articles": 6,
+      "articles": 7,
       "classified": 0,
-      "activeDays": 6,
+      "activeDays": 7,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -14005,6 +14034,13 @@
         },
         {
           "date": "2026-10-26",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -14526,9 +14562,9 @@
     },
     {
       "outlet": "mpmbc.co.kr",
-      "articles": 7,
+      "articles": 8,
       "classified": 0,
-      "activeDays": 6,
+      "activeDays": 7,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -14578,6 +14614,13 @@
         },
         {
           "date": "2026-11-01",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
@@ -20694,9 +20737,9 @@
     },
     {
       "outlet": "zdnet.co.kr",
-      "articles": 1,
+      "articles": 2,
       "classified": 0,
-      "activeDays": 1,
+      "activeDays": 2,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -20711,6 +20754,13 @@
       "series": [
         {
           "date": "2026-10-28",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-16",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
