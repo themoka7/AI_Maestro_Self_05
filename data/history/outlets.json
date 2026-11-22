@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-11-20",
-    "days": 72
+    "to": "2026-11-21",
+    "days": 73
   },
-  "generatedAt": "2026-11-21T11:00:24.827351+09:00",
+  "generatedAt": "2026-11-22T09:59:31.380990+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 3228,
+    "articles": 3230,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -601,6 +601,14 @@
       "cheerleader_rate": null,
       "neutral_rate": null,
       "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-11-21",
+      "articles": 2,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
     }
   ],
   "outlets": [
@@ -1046,9 +1054,9 @@
     },
     {
       "outlet": "netongs.com",
-      "articles": 237,
+      "articles": 238,
       "classified": 0,
-      "activeDays": 56,
+      "activeDays": 57,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -1452,15 +1460,22 @@
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
+        },
+        {
+          "date": "2026-11-21",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
         }
       ],
       "rank": 9
     },
     {
       "outlet": "전남일보",
-      "articles": 97,
+      "articles": 98,
       "classified": 0,
-      "activeDays": 48,
+      "activeDays": 49,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -1804,6 +1819,13 @@
         },
         {
           "date": "2026-11-20",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-21",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
