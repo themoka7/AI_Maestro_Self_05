@@ -1,0 +1,143 @@
+{
+  "event": {
+    "id": "yeosu-island-expo-2026",
+    "name": "2026 여수세계섬박람회",
+    "description": "공식 보도자료를 기준점으로, 각 언론사 보도가 그로부터 얼마나 떨어져 있는지 측정"
+  },
+  "date": "2026-11-23",
+  "generatedAt": "2026-11-24T05:10:15.079456+00:00",
+  "totals": {
+    "articles": 3,
+    "watchdog_rate": null,
+    "cheerleader_rate": null,
+    "neutral_rate": null,
+    "duplication_rate": 0.0
+  },
+  "totalsUniqueOnly": {
+    "articles": 3,
+    "watchdog_rate": null,
+    "cheerleader_rate": null,
+    "neutral_rate": null,
+    "duplication_rate": 0.0
+  },
+  "params": {
+    "duplication_threshold": 0.7,
+    "prior_weight": 10.0,
+    "min_articles": 5
+  },
+  "outlets": [
+    {
+      "outlet": "KBS",
+      "articles": 1,
+      "classified": 0,
+      "watchdog": 0,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0,
+      "autonomy_score": null,
+      "sufficient_sample": false,
+      "rank": null
+    },
+    {
+      "outlet": "mpmbc.co.kr",
+      "articles": 1,
+      "classified": 0,
+      "watchdog": 0,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0,
+      "autonomy_score": null,
+      "sufficient_sample": false,
+      "rank": null
+    },
+    {
+      "outlet": "머니투데이",
+      "articles": 1,
+      "classified": 0,
+      "watchdog": 0,
+      "cheerleader": 0,
+      "neutral": 0,
+      "duplicated": 0,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0,
+      "autonomy_score": null,
+      "sufficient_sample": false,
+      "rank": null
+    }
+  ],
+  "articles": [
+    {
+      "id": "bf42cd9125530eaf",
+      "title": "[사설]혈세낭비 부르는 지자체의 행사과욕",
+      "url": "https://mt.co.kr/opinion/2026/11/23/2026112214475945704",
+      "outlet": "머니투데이",
+      "publishedAt": "2026-11-23T04:00:00+09:00",
+      "category": null,
+      "score": null,
+      "confidence": null,
+      "rationale": "",
+      "flaggedIssues": [],
+      "duplication": 0.0,
+      "isDuplicated": false,
+      "docScore": 0.0,
+      "copiedSentenceRatio": 0.0,
+      "isCanonical": true,
+      "syndicationSpread": 1,
+      "pressRelease": null
+    },
+    {
+      "id": "abfe0b0e55ef5d49",
+      "title": "섬박람회 끝나니 남은 건 연 19억 원 운영비?",
+      "url": "https://mpmbc.co.kr/NewsArticle/1546820",
+      "outlet": "mpmbc.co.kr",
+      "publishedAt": "2026-11-23T08:10:00+09:00",
+      "category": null,
+      "score": null,
+      "confidence": null,
+      "rationale": "",
+      "flaggedIssues": [],
+      "duplication": 0.0,
+      "isDuplicated": false,
+      "docScore": 0.0,
+      "copiedSentenceRatio": 0.0,
+      "isCanonical": true,
+      "syndicationSpread": 1,
+      "pressRelease": null
+    },
+    {
+      "id": "fd729524ca8ebd24",
+      "title": "여수 시민 10명 중 6명, 섬박람회 ‘부정 평가’",
+      "url": "https://news.kbs.co.kr/news/pc/view/view.do?ncd=8719710",
+      "outlet": "KBS",
+      "publishedAt": "2026-11-23T09:25:00+09:00",
+      "category": null,
+      "score": null,
+      "confidence": null,
+      "rationale": "",
+      "flaggedIssues": [],
+      "duplication": 0.0,
+      "isDuplicated": false,
+      "docScore": 0.0,
+      "copiedSentenceRatio": 0.0,
+      "isCanonical": true,
+      "syndicationSpread": 1,
+      "pressRelease": null
+    }
+  ],
+  "coverage": {
+    "ok": 3
+  },
+  "goldenLabeled": 0,
+  "excerptOnly": true,
+  "demo": false
+}

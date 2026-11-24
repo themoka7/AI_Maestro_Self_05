@@ -6,10 +6,10 @@
   },
   "window": {
     "from": "2026-09-10",
-    "to": "2026-11-22",
-    "days": 74
+    "to": "2026-11-23",
+    "days": 75
   },
-  "generatedAt": "2026-11-23T10:28:01.712660+09:00",
+  "generatedAt": "2026-11-24T14:10:15.236026+09:00",
   "params": {
     "duplication_threshold": 0.7,
     "prior_weight": 10.0,
@@ -19,7 +19,7 @@
   "hasClassification": true,
   "classifiedArticles": 105,
   "totals": {
-    "articles": 3236,
+    "articles": 3239,
     "watchdog_rate": 23.8,
     "cheerleader_rate": 47.6,
     "neutral_rate": 28.6,
@@ -613,6 +613,14 @@
     {
       "date": "2026-11-22",
       "articles": 6,
+      "watchdog_rate": null,
+      "cheerleader_rate": null,
+      "neutral_rate": null,
+      "duplication_rate": 0.0
+    },
+    {
+      "date": "2026-11-23",
+      "articles": 3,
       "watchdog_rate": null,
       "cheerleader_rate": null,
       "neutral_rate": null,
@@ -1920,9 +1928,9 @@
     },
     {
       "outlet": "KBS",
-      "articles": 48,
+      "articles": 49,
       "classified": 0,
-      "activeDays": 24,
+      "activeDays": 25,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -2099,6 +2107,13 @@
         {
           "date": "2026-11-05",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-23",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -5956,9 +5971,9 @@
     },
     {
       "outlet": "머니투데이",
-      "articles": 16,
+      "articles": 17,
       "classified": 0,
-      "activeDays": 13,
+      "activeDays": 14,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -6058,6 +6073,13 @@
         {
           "date": "2026-10-26",
           "articles": 2,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-23",
+          "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
           "autonomy_score": null
@@ -15023,9 +15045,9 @@
     },
     {
       "outlet": "mpmbc.co.kr",
-      "articles": 8,
+      "articles": 9,
       "classified": 0,
-      "activeDays": 7,
+      "activeDays": 8,
       "watchdog": 0,
       "cheerleader": 0,
       "neutral": 0,
@@ -15082,6 +15104,13 @@
         },
         {
           "date": "2026-11-16",
+          "articles": 1,
+          "duplication_rate": 0.0,
+          "watchdog_rate": null,
+          "autonomy_score": null
+        },
+        {
+          "date": "2026-11-23",
           "articles": 1,
           "duplication_rate": 0.0,
           "watchdog_rate": null,
